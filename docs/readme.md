@@ -1,3 +1,11 @@
+Форк
+
+zapret с изменённым конфигом для быстрого развёртывания на ruVPS rocketcloud. discord скопирован на запуск.
+
+wget https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh -O fast_install.sh
+chmod +x fast_install.sh
+./fast_install.sh
+
 # zapret v69.5
 
 # ВНИМАНИЕ, остерегайтесь мошенников
