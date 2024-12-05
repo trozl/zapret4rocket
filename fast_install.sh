@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+exec < /dev/tty
 
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
