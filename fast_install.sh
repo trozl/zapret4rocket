@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-exec < /dev/tty
 
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
@@ -18,7 +17,7 @@ unzip zapret.zip
 # Запуск установочных скриптов
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
-sh zapret/install_easy.sh </dev/tty
+sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
 zapret/init.d/sysv/zapret restart
