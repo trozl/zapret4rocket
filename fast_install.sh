@@ -17,7 +17,7 @@ unzip zapret.zip
 # Запуск установочных скриптов
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
-sh zapret/install_easy.sh
+sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
 zapret/init.d/sysv/zapret restart
