@@ -10,6 +10,7 @@ cd /opt
 # Скачивание и распаковка архива
 wget https://github.com/IndeecFOX/zapret4rocket/releases/download/Z4R/zapret.zip
 unzip zapret.zip
+mv zapret-v69.8 zapret
 
 # Установка прав на выполнение
 #find zapret/* -type f -exec chmod +x {} \;
