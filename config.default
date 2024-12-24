@@ -96,7 +96,7 @@ NFQWS_OPT="
 "
 
 # none,ipset,hostlist,autohostlist
-MODE_FILTER=none
+MODE_FILTER=autohostlist
 
 # openwrt only : donttouch,none,software,hardware
 FLOWOFFLOAD=donttouch
@@ -133,4 +133,4 @@ DISABLE_IPV6=1
 # select which init script will be used to get ip or host list
 # possible values : get_user.sh get_antizapret.sh get_combined.sh get_reestr.sh get_hostlist.sh
 # comment if not required
-#GETLIST=
+GETLIST=get_refilter_domains.sh
