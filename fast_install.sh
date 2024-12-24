@@ -12,6 +12,9 @@ wget https://github.com/IndeecFOX/zapret4rocket/releases/download/Z4R/zapret.zip
 unzip zapret.zip
 mv zapret-v69.8 zapret
 
+#Включение обхода дискорда
+cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
+
 # Установка прав на выполнение
 #find zapret/* -type f -exec chmod +x {} \;
 
