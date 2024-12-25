@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-echo "Test"
+echo "Tестирование"
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
 
