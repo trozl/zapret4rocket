@@ -15,7 +15,13 @@ if [ -f "zapret/uninstall_easy.sh" ]; then
 else
     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
 fi
-rm -rf zapret
+if [ -d "zapret" ]; then
+    echo "Удаляем папку zapret..."
+    rm -rf zapret
+    echo "Папка zapret успешно удалена."
+else
+    echo "Папка zapret не существует."
+fi
 
 # Скачивание и распаковка архива zapret 69.8
 wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
