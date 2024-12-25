@@ -16,7 +16,7 @@ else
     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
 fi
 if [ -d "zapret" ]; then
-    echo "Удаляем папку zapretki..."
+    echo "Удаляем папку zapret..."
     rm -rf zapret
     echo "Папка zapret успешно удалена."
 else
@@ -38,6 +38,7 @@ mv config.default /opt/zapret/
 # Запуск установочных скриптов
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
+echo "Тестирование"
 sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
