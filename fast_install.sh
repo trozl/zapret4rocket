@@ -7,6 +7,10 @@ apt update && apt install -y unzip
 # Переход в директорию /opt
 cd /opt
 
+#Удаление старого запрета, если есть
+sh zapret/uninstall_easy.sh
+rm -rf zapret
+
 # Скачивание и распаковка архива zapret 69.8
 wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
 unzip zapret-v69.8.zip
