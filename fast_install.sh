@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
-echo "Tестирование"
+
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
 
 # Переход в директорию /opt
 cd /opt
+echo "Tестирование"
 
 #Удаление старого запрета, если есть
 if [ -f "zapret/uninstall_easy.sh" ]; then
