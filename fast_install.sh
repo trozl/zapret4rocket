@@ -16,7 +16,7 @@ else
     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
 fi
 if [ -d "zapret" ]; then
-    echo "Удаляем папку zapret..."
+    echo "Удаляем папку zapretki..."
     rm -rf zapret
     echo "Папка zapret успешно удалена."
 else
@@ -27,7 +27,7 @@ fi
 wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
 unzip zapret-v69.8.zip
 mv zapret-v69.8 zapret
-echo "v1.3"
+
 #Включение обхода дискорда
 cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
 
