@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-echo "v1.3"
+
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
 
@@ -27,7 +27,7 @@ fi
 wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
 unzip zapret-v69.8.zip
 mv zapret-v69.8 zapret
-
+echo "v1.3"
 #Включение обхода дискорда
 cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
 
