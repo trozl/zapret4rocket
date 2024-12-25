@@ -1,12 +1,11 @@
 #!/bin/bash
 set -e
-
+echo "v1.3"
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
 
 # Переход в директорию /opt
 cd /opt
-echo "Tестирование"
 
 #Удаление старого запрета, если есть
 if [ -f "zapret/uninstall_easy.sh" ]; then
@@ -17,7 +16,7 @@ else
     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
 fi
 if [ -d "zapret" ]; then
-    echo "Удаляем папку zapreta..."
+    echo "Удаляем папку zapret..."
     rm -rf zapret
     echo "Папка zapret успешно удалена."
 else
