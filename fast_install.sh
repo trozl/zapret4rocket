@@ -9,7 +9,7 @@ cd /opt
 
 #Удаление старого запрета, если есть
 if [ -f "zapret/uninstall_easy.sh" ]; then
-    echo "Файл zapret/uninstall_easy.sh найден. Выполняем его..."
+    echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
     sh zapret/uninstall_easy.sh
     echo "Скрипт uninstall_easy.sh выполнен."
 else
@@ -38,7 +38,7 @@ mv config.default /opt/zapret/
 # Запуск установочных скриптов
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
-echo "Тестирование!1!"
+
 sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
