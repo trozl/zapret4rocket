@@ -38,7 +38,6 @@ mv config.default /opt/zapret/
 # Запуск установочных скриптов
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
-
 sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
