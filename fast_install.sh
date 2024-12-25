@@ -8,7 +8,13 @@ apt update && apt install -y unzip
 cd /opt
 
 #Удаление старого запрета, если есть
-sh zapret/uninstall_easy.sh
+if [ -f "zapret/uninstall_easy.sh" ]; then
+    echo "Файл zapret/uninstall_easy.sh найден. Выполняем его..."
+    sh zapret/uninstall_easy.sh
+    echo "Скрипт uninstall_easy.sh выполнен."
+else
+    echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
+fi
 rm -rf zapret
 
 # Скачивание и распаковка архива zapret 69.8
