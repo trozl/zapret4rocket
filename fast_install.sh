@@ -41,4 +41,4 @@ sh zapret/install_prereq.sh
 sh -i zapret/install_easy.sh
 
 # Перезапуск сервиса zapret
-zapret/init.d/sysv/zapret restart
+#zapret/init.d/sysv/zapret restart
