@@ -23,7 +23,15 @@ else
     echo "Папка zapret не существует."
 fi
 
-# Скачивание и распаковка архива zapret 69.8
+# Проверяем наличие файла zapret-v69.8.zip и выполняем скачивание архив, если отсутствует
+if [ -f "zapret-v69.8.zip" ]; then
+    echo "Файл zapret-v69.8.zip уже существует. Используем его."
+else
+    echo "Файл zapret-v69.8.zip не найден. Загружаем файл..."
+    wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
+fi
+
+# Распаковка архива zapret 69.8
 wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
 unzip zapret-v69.8.zip
 mv zapret-v69.8 zapret
