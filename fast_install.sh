@@ -6,7 +6,7 @@ read -p "You want install 3x-ui panel? [Y/n] (Enter for: n): " answer
 
 # Сохраняем ответ для последующего использования
 install_3xui=false
-if [[ -z "$answer" || "$answer" =~ ^[Yy]$ ]]; then
+if [[ "$answer" =~ ^[Yy]$ ]]; then
     install_3xui=true
 fi
 
