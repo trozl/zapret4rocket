@@ -1,15 +1,20 @@
 #!/bin/bash
 set -e
 
+#!/bin/bash
+
 # Запрос на ввод
-#read -p "You want install 3x-ui panel? [Y/n] (Enter for: n): " answer
-# Если пользователь вводит "y" или "Y" (или просто нажимает Enter), выполняем установку
-#if [[ -z "$answer" || "$answer" =~ ^[Yy]$ ]]; then
-#    echo "Installing 3x-ui panel..."
-#    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-#else
-#    echo "Skipping 3x-ui panel installation."
-#fi
+read -p "You want install 3x-ui panel? [Y/n] (Enter for: n): " answer
+
+# Проверяем ввод пользователя
+if [[ -z "$answer" ]]; then
+    echo "Skipping 3x-ui panel installation (default action)."
+elif [[ "$answer" =~ ^[Yy]$ ]]; then
+    echo "Installing 3x-ui panel..."
+    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+else
+    echo "Skipping 3x-ui panel installation."
+fi
 
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
