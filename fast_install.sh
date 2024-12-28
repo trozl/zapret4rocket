@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+# Запрос на ввод
+read -p "You want install 3x-ui panel? [Y/n] (Enter for: n): " answer
+
+# Сохраняем ответ для последующего использования
+install_3xui=false
+if [[ -z "$answer" || "$answer" =~ ^[Yy]$ ]]; then
+    install_3xui=true
+fi
+
 # Обновление пакетов и установка unzip
 apt update && apt install -y unzip
 
@@ -48,5 +57,8 @@ sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
 sh -i zapret/install_easy.sh
 
-# Перезапуск сервиса zapret
-#zapret/init.d/sysv/zapret restart
+# Установка панели, если был запрос в начале скрипта
+if $install_3xui; then
+    echo "Installing 3x-ui panel..."
+    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+fi
