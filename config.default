@@ -92,7 +92,7 @@ NFQWS_OPT="
 --filter-tcp=80 --dpi-desync=fake,split2 --dpi-desync-ttl=0 --dpi-desync-fooling=md5sig,badsum <HOSTLIST> --new
 --filter-tcp=443 --hostlist-domains=googlevideo.com --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=midsld-1 --new
 --filter-tcp=443 --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=midsld-1 --dpi-desync-fooling=md5sig,badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --dpi-desync-autottl <HOSTLIST> --new
---filter-udp=443 --dpi-desync=fake,udplen --dpi-desync-udplen-increment=10 --dpi-desync-udplen-pattern=0xDEADBEEF --dpi-desync-fake-quic=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --dpi-desync-repeats=7 --dpi-desync-cutoff=n2 <HOSTLIST>
+--filter-udp=443 --dpi-desync=fake,fakeddisorder --dpi-desync-fooling=badsum --dpi-desync-split-pos=midsld --dpi-desync-fake-tls=0x00000000 <HOSTLIST>
 "
 
 # none,ipset,hostlist,autohostlist
