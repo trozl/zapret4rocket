@@ -8,7 +8,7 @@
 
 wget https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh -O fast_install.sh && chmod +x fast_install.sh && ./fast_install.sh
 
-На все вопросы жмём Enter. По окончании всё будет работать. К серверу подключаетесь как хотите уже, WG/VLESS/OpenVPN
+На все вопросы жмём Enter (В самом начале скрипта спрашивает установить ли 3x-ui панель (можете ввести Y на вопрос, если она вам нужна)). По окончании всех прожатий enter всё будет работать. К серверу подключаетесь как хотите уже, WG/VLESS/OpenVPN
 YouTube летает, есть доступы к ntc.party, meduza.io и прочему. Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет)
 
 UPD 29.12.24(2):
