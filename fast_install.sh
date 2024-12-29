@@ -3,13 +3,13 @@ set -e
 
 #!/bin/bash
 
-# Запрос на ввод
-read -p "You want install 3x-ui panel? [Y/n] (Enter for: n): " answer
-
-# Проверяем ввод пользователя
-if [[ -z "$answer" ]]; then
+#Запрос на установку 3x-ui
+read -p "Do you want to install the 3x-ui panel? (Y/N): " answer
+# Удаляем лишние символы и пробелы, приводим к верхнему регистру
+clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+if [[ -z "$clean_answer" ]]; then
     echo "Skipping 3x-ui panel installation (default action)."
-elif [[ "$answer" =~ ^[Yy]$ ]]; then
+elif [[ "$clean_answer" == "Y" ]]; then
     echo "Installing 3x-ui panel..."
     bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 else
