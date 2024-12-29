@@ -1,12 +1,12 @@
 Установит запрет 69.8
 Включит скрипт для дискорда, установит рабочие на данный момент стратегии.
-Всё что нужно - это ввести целиком команды ниже и нажать Enter. Затем повторить нажание Enter на любые запросы.
+Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
 Метод подключения к серверу выбираете самостоятельно.
 Проверено на rocketcloud.ru ubuntu 24v, debian 12.
 
-Установка и развёртвывание zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем всё сразу и вставляем в ssh:
+Установка и развёртвывание zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:
 
-wget https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh -O fast_install.sh && chmod +x fast_install.sh && ./fast_install.sh
+bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh)
 
 На все вопросы жмём Enter (В самом начале скрипта спрашивает установить ли 3x-ui панель (можете ввести Y на вопрос, если она вам нужна)). По окончании всех прожатий enter всё будет работать. К серверу подключаетесь как хотите уже, WG/VLESS/OpenVPN
 YouTube летает, есть доступы к ntc.party, meduza.io и прочему. Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет)
