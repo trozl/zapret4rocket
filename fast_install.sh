@@ -62,3 +62,8 @@ mv config.default /opt/zapret/
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
 sh -i zapret/install_easy.sh
+
+# Перезагрузка zapret с помощью systemd
+echo "Перезагружаем zapret..."
+sleep 2
+systemctl restart zapret
