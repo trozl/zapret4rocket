@@ -38,18 +38,19 @@ else
     echo "Папка zapret не существует."
 fi
 
-# Проверяем наличие файла zapret-v69.8.zip и выполняем скачивание архив, если отсутствует
-if [ -f "zapret-v69.8.zip" ]; then
-    echo "Файл zapret-v69.8.zip уже существует. Используем его."
+# Проверяем наличие файла zip и выполняем скачивание архив, если отсутствует
+if [ -f "zapret-v69.9.zip" ]; then
+    echo "Файл zip уже существует. Используем его."
 else
-    echo "Файл zapret-v69.8.zip не найден. Загружаем файл..."
-    wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
+    echo "Файл zip не найден. Загружаем файл..."
+    wget https://github.com/bol-van/zapret/releases/download/v69.9/zapret-v69.9.zip
 fi
 
-# Распаковка архива zapret 69.8
-wget https://github.com/bol-van/zapret/releases/download/v69.8/zapret-v69.8.zip
-unzip zapret-v69.8.zip
-mv zapret-v69.8 zapret
+# Распаковка архива zapret и его удаление
+wget https://github.com/bol-van/zapret/releases/download/v69.9/zapret-v69.9.zip
+unzip zapret-v69.9.zip
+rm -f zapret-v69.9.zip
+mv zapret-v69.9 zapret
 
 #Включение обхода дискорда
 cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
