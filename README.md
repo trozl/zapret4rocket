@@ -13,8 +13,11 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
 К серверу подключаетесь как хотите уже, WG/VLESS/OpenVPN YouTube летает, есть доступы к ntc.party, meduza.io и прочему.  
 Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет)  
   
-Чат: https://t.me/zee4r/  
-
+Чат: https://t.me/zee4r/
+Тестовый сервер
+```
+vless://test3@109.205.56.128:443?type=tcp&security=reality&pbk=kIoEwUkvXZPs-rVKem8RfKpEDcrCHyWHX4wDPDrxWDw&fp=chrome&sni=rutube.ru&sid=c4&spx=%2F&flow=xtls-rprx-vision#test-test3
+```
 Upd 31.12.24:
 - Обновление 69.8 > 69.9v 
 - Добавлено удаление архива после установки
