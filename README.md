@@ -14,6 +14,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
 Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет)  
   
 Чат: https://t.me/zee4r/
+
 Тестовый сервер
 ```
 vless://test3@109.205.56.128:443?type=tcp&security=reality&pbk=kIoEwUkvXZPs-rVKem8RfKpEDcrCHyWHX4wDPDrxWDw&fp=chrome&sni=rutube.ru&sid=c4&spx=%2F&flow=xtls-rprx-vision#test-test3
