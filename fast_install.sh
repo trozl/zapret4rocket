@@ -4,7 +4,7 @@ set -e
 #!/bin/bash
 
 #Запрос на установку 3x-ui
-read -p "Do you want to install the 3x-ui panel? (Y/N): " answer
+read -p "Do you want to install the 3x-ui panel? (Y/N, Enter for N): " answer
 # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 if [[ -z "$clean_answer" ]]; then
