@@ -17,7 +17,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
 
 Тестовый сервер
 ```
-vless://test3@109.205.56.128:443?type=tcp&security=reality&pbk=kIoEwUkvXZPs-rVKem8RfKpEDcrCHyWHX4wDPDrxWDw&fp=chrome&sni=rutube.ru&sid=c4&spx=%2F&flow=xtls-rprx-vision#test-test3
+(Отключен)
 ```
 Upd 31.12.24:
 - Обновление 69.8 > 69.9v 
