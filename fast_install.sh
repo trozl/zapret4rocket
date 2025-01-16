@@ -21,7 +21,7 @@ elif [[ "$clean_answer" == "3PROXY" ]]; then
     wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
     wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
     mv del.proxyauth .proxyauth
-    mv del.proxyauth /etc/3proxy/
+    mv .proxyauth /etc/3proxy/
     mv 3proxy.cfg /etc/3proxy/
     systemctl restart 3proxy
 else
