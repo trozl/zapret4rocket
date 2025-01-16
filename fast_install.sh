@@ -4,16 +4,27 @@ set -e
 #!/bin/bash
 
 #Запрос на установку 3x-ui
-read -p "Do you want to install the 3x-ui panel? (Y/N, Enter for N): " answer
+read -p "Install tunneling software?: (3xui, wg, 3proxy or Enter for none): " answer
 # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 if [[ -z "$clean_answer" ]]; then
-    echo "Skipping 3x-ui panel installation (default action)."
-elif [[ "$clean_answer" == "Y" ]]; then
+    echo "Skipping tunneling soft installation (default action)."
+elif [[ "$clean_answer" == "3xui" ]]; then
     echo "Installing 3x-ui panel..."
     bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+elif [[ "$clean_answer" == "wg" ]]; then
+    echo "Installing wg..."
+    bash <(curl -Ls https://raw.githubusercontent.com/angristan/wireguard-install/refs/heads/master/wireguard-install.sh)
+elif [[ "$clean_answer" == "3proxy" ]]; then
+    echo "Installing 3proxy..."
+    bash <(curl -Ls https://raw.githubusercontent.com/SnoyIatk/3proxy/master/3proxyinstall.sh)
+    wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
+    wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
+    mv del.proxyauth /etc/3proxy/
+    mv 3proxy.cfg /etc/3proxy/
+    systemctl restart 3proxy
 else
-    echo "Skipping 3x-ui panel installation."
+    echo "Skipping tunneling soft installation."
 fi
 
 # Обновление пакетов и установка unzip
