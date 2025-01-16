@@ -3,19 +3,19 @@ set -e
 
 #!/bin/bash
 
-#Запрос на установку 3x-ui
+#Запрос на установку 3x-ui или аналогов
 read -p "Install tunneling software?: (3xui, wg, 3proxy or Enter for none): " answer
 # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 if [[ -z "$clean_answer" ]]; then
     echo "Skipping tunneling soft installation (default action)."
-elif [[ "$clean_answer" == "3xui" ]]; then
+elif [[ "$clean_answer" == "3XUI" ]]; then
     echo "Installing 3x-ui panel..."
     bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-elif [[ "$clean_answer" == "wg" ]]; then
+elif [[ "$clean_answer" == "WG" ]]; then
     echo "Installing wg..."
     bash <(curl -Ls https://raw.githubusercontent.com/angristan/wireguard-install/refs/heads/master/wireguard-install.sh)
-elif [[ "$clean_answer" == "3proxy" ]]; then
+elif [[ "$clean_answer" == "3PROXY" ]]; then
     echo "Installing 3proxy..."
     bash <(curl -Ls https://raw.githubusercontent.com/SnoyIatk/3proxy/master/3proxyinstall.sh)
     wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
