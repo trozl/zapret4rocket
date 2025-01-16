@@ -18,11 +18,11 @@ elif [[ "$clean_answer" == "WG" ]]; then
 elif [[ "$clean_answer" == "3PROXY" ]]; then
     echo "Installing 3proxy..."
     bash <(curl -Ls https://raw.githubusercontent.com/SnoyIatk/3proxy/master/3proxyinstall.sh)
-    wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
-    wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
-    mv del.proxyauth .proxyauth
-    mv .proxyauth /etc/3proxy/
-    mv 3proxy.cfg /etc/3proxy/
+    wget -O /etc/3proxy/.proxyauth https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
+    wget -O /etc/3proxy/3proxy.cfg https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
+    #mv del.proxyauth .proxyauth
+    #mv .proxyauth /etc/3proxy/
+    #mv 3proxy.cfg /etc/3proxy/
     systemctl restart 3proxy
 else
     echo "Skipping tunneling soft installation."
