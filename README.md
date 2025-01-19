@@ -19,6 +19,8 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
 ```
 (Отключен)
 ```
+Upd 19.01.25: Добавлен вариант установки Marzban помимо 3xui и прочего
+
 Upd 17.01.25:
 - Включена работа с ipv6 по-умолчанию
 - Добавлена возможность так же установить wg или 3proxy в начале работы скрипта (Ранее был только 3xui)
