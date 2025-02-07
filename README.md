@@ -19,6 +19,10 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
 ```
 vless://test@45.156.21.250:443?type=tcp&security=reality&pbk=T_PUQPpUcIDBj3bD5CwngfOS5LxzS6RGD-Lk5hITQhI&fp=chrome&sni=rutube.ru&sid=51&spx=%2F&flow=xtls-rprx-vision#Z4R-test
 ```
+Fork Upd 07.02.25: добавлен простенький скрипт для установки на OpenWRT
+```
+opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
+``` 
 Upd 19.01.25: Добавлен вариант установки Marzban помимо 3xui и прочего
 
 Upd 17.01.25:
