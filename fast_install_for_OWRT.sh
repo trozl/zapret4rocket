@@ -1,7 +1,10 @@
+#!!! Write: "opkg install bash" - First in SSH!!!
+# opkg install bash && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
+
 opkg update
 opkg install unzip
  opkg install curl
- opkg install bash
+
  cd /
  mkdir opt
 cd /opt
