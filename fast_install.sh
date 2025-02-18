@@ -80,3 +80,4 @@ sh -i zapret/install_easy.sh
 echo "Перезагружаем zapret..."
 sleep 2
 systemctl restart zapret
+echo "Установка завершена"
