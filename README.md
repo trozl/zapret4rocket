@@ -1,25 +1,25 @@
-Установит запрет v70  
-Включит скрипт для дискорда, установит рабочие на данный момент стратегии.  
-Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.  
+**Установит запрет v70  
+Включит скрипт для дискорда, установит рабочие на данный момент стратегии.**  
+Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
 Метод подключения к серверу выбираете самостоятельно.  
 Проверено на rocketcloud.ru ubuntu 22/24v, debian 12.  
   
-Установка/обновление zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:  
+**Установка/обновление** zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:  
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh)
 ```  
-На все вопросы жмём Enter (В самом начале скрипт спрашивает установить ли 3x-ui панель или аналоги (жмите Enter, если ничего не нужно или введите соответствущий текст)).   
+**На все вопросы жмём Enter** (В самом начале скрипт спрашивает установить ли 3x-ui панель или аналоги (жмите Enter, если ничего не нужно или введите соответствущий текст)).   
 По окончании всех прожатий enter всё будет работать.   
 К серверу подключаетесь уже как хотите, WG/VLESS/OpenVPN и т.п. YouTube летает, есть доступы к ntc.party, meduza.io и прочему.  
 Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет). Инста должна только через приложение работать (бан ip в РФ)  
   
-Чат: https://t.me/zee4r/
+**Чат:** https://t.me/zee4r/
 
-Тестовый сервер
+**Тестовый сервер**
 ```
 vless://test@45.156.21.250:443?type=tcp&security=reality&pbk=T_PUQPpUcIDBj3bD5CwngfOS5LxzS6RGD-Lk5hITQhI&fp=chrome&sni=rutube.ru&sid=51&spx=%2F&flow=xtls-rprx-vision#Z4R-test
 ```
-Fork Upd 07.02.25: добавлен простенький скрипт для установки на OpenWRT
+Fork Upd 07.02.25: добавлен простенький скрипт **для установки на OpenWRT**
 ```
 opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
 ``` 
