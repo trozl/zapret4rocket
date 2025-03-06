@@ -23,6 +23,8 @@ Fork Upd 07.02.25: добавлен простенький скрипт **для
 ```
 opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
 ``` 
+Upd 06.03.25: v70 upd to v70.3
+
 Upd 21.02.25: change googlevideo.com strategy. Заменил стратегию для GV, пропали лаги на shorts, при включении некоторых видео и, возможно, иные проблемы!!!
 
 Upd 18.02.25: iptables as default. (На некоторых хостингах zapret ставил почему-то nftables. C nftables не работает или работает нестабильно, может не всегда, не везде, но зачем, если можно просто юзать iptables на данном этапе.
