@@ -15,7 +15,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
   
 **Чат:** https://t.me/zee4r/
 
-**Тестовый сервер**
+**Тестовый сервер(Не работает в данный момент)**
 ```
 vless://test@45.156.21.250:443?type=tcp&security=reality&pbk=T_PUQPpUcIDBj3bD5CwngfOS5LxzS6RGD-Lk5hITQhI&fp=chrome&sni=rutube.ru&sid=51&spx=%2F&flow=xtls-rprx-vision#Z4R-test
 ```
