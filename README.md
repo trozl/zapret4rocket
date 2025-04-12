@@ -1,8 +1,7 @@
-**Установит запрет v70.3
-Включит скрипт для дискорда, установит рабочие на данный момент стратегии.**  
+**Установит запрет v70.6 иу рабочие на данный момент стратегии.**  
 Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
 Метод подключения к серверу выбираете самостоятельно.  
-Проверено на rocketcloud.ru ubuntu 22/24v, debian 12.  
+Проверяется на на rocketcloud.ru ubuntu 22/24v, debian 12.  
   
 **Установка/обновление** zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:  
 ```
@@ -15,14 +14,16 @@ bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/h
   
 **Чат:** https://t.me/zee4r/
 
+Fork 07.02.25: простенький скрипт **для установки на OpenWRT**
+```
+opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
+``` 
 **Тестовый сервер(Не работает в данный момент)**
 ```
 vless://test@45.156.21.250:443?type=tcp&security=reality&pbk=T_PUQPpUcIDBj3bD5CwngfOS5LxzS6RGD-Lk5hITQhI&fp=chrome&sni=rutube.ru&sid=51&spx=%2F&flow=xtls-rprx-vision#Z4R-test
 ```
-Fork Upd 07.02.25: добавлен простенький скрипт **для установки на OpenWRT**
-```
-opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
-``` 
+Upd 12.04.24 v70.3 >> v70.6, обновлены стратегии, убран скрипт для дискорда (заменен на стратегию)
+
 Upd 06.03.25: v70 upd to v70.3
 
 Upd 21.02.25: change googlevideo.com strategy. Заменил стратегию для GV, пропали лаги на shorts, при включении некоторых видео и, возможно, иные проблемы!!!
