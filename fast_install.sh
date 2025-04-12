@@ -56,8 +56,8 @@ unzip zapret-v70.6.zip
 rm -f zapret-v70.6.zip
 mv zapret-v70.6 zapret
 
-#Включение обхода дискорда
-cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
+#(Устарело, отключено) Включение обхода дискорда
+#cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
