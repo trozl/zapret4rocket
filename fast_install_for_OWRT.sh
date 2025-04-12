@@ -26,13 +26,13 @@ else
 fi
 
 # Распаковка архива zapret и его удаление
-wget -O zapret-v70.zip "https://github.com/bol-van/zapret/releases/download/v70/zapret-v70.zip"
-unzip zapret-v70.zip
-rm -f zapret-v70.zip
-mv zapret-v70 zapret
+wget -O zapret-v70.6.zip "https://github.com/bol-van/zapret/releases/download/v70.6/zapret-v70.6.zip"
+unzip zapret-v70.6.zip
+rm -f zapret-v70.6.zip
+mv zapret-v70.6 zapret
 
-#Включение обхода дискорда
-cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
+#Включение обхода дискорда (Отключено, заменено стратегией)
+#cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
