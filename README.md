@@ -6,7 +6,11 @@
 **Установка/обновление** zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:  
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh)
-```  
+```
+Если у вас уже стоит zapret и вам нужно только обновление config файла:
+```
+curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
+```   
 **На все вопросы жмём Enter** (В самом начале скрипт спрашивает установить ли 3x-ui панель или аналоги (жмите Enter, если ничего не нужно или введите соответствущий текст)).   
 По окончании всех прожатий enter всё будет работать.   
 К серверу подключаетесь уже как хотите, WG/VLESS/OpenVPN и т.п. YouTube летает, есть доступы к ntc.party, meduza.io и прочему.  
