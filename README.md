@@ -26,6 +26,8 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
 ``` 
+Upd 03.05.25: Добавил в обход домены CDN prnhub и xv-ru для рукодельников ;)
+
 Upd 24.04.25: Обновил стратегии на более лёгкие, универсальные. Старые закомментил в файле добавив перед номер порта "7". Можно будет возвращать старые стратегии простым редактированием и перезапуском службы. Ну и в конфиг в начале дату вписываю теперь.
 
 Upd 12.04.25: v70.3 >> v70.6, обновлены стратегии, убран скрипт для дискорда (заменен на стратегию)
