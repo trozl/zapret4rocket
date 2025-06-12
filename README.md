@@ -1,4 +1,4 @@
-**Установит запрет v70.6 и рабочие на данный момент стратегии.**  
+**Установит запрет v71.1 и рабочие на данный момент стратегии.**  
 Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
 Метод подключения к серверу выбираете самостоятельно.  
 Проверяется на на rocketcloud.ru ubuntu 22/24v, debian 12.  
@@ -25,7 +25,9 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 Только обновление config файла:
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
-``` 
+```
+Upd 12.06.25: zapret upd v70.6 >> v71.1. Minor fix(ytimg.com domen), add FILTER_TTL_EXPIRED_ICMP parametr for 71v).
+
 Upd 03.05.25: Добавил в обход домены CDN prnhub и xv-ru для рукодельников ;)
 
 Upd 24.04.25: Обновил стратегии на более лёгкие, универсальные. Старые закомментил в файле добавив перед номер порта "7". Можно будет возвращать старые стратегии простым редактированием и перезапуском службы. Ну и в конфиг в начале дату вписываю теперь.
