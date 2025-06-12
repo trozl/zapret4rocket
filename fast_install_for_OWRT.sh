@@ -26,7 +26,7 @@ else
 fi
 
 # Распаковка архива zapret и его удаление
-wget -O zapret-v70.6.zip "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1.zip"
+wget -O zapret-v71.1.zip "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1.zip"
 unzip zapret-v71.1.zip
 rm -f zapret-v71.1.zip
 mv zapret-v71.1 zapret
