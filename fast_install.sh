@@ -61,6 +61,8 @@ git clone https://github.com/IndeecFOX/zapret4rocket.git
 cp -r zapret4rocket/lists /opt/zapret/
 cp -r zapret4rocket/fake /opt/zapret/
 rm -rf zapret4rocket
+chmod -R 777 /opt/zapret/fake
+chmod -R 777 /opt/zapret/lists
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
