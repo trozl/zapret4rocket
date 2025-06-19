@@ -29,7 +29,7 @@ else
 fi
 
 # Обновление пакетов и установка unzip
-apt update && apt install -y unzip
+apt update && apt install -y unzip && apt install -y git
 
 # Переход в директорию /opt
 cd /opt
@@ -56,8 +56,11 @@ unzip zapret-v71.1.zip
 rm -f zapret-v71.1.zip
 mv zapret-v71.1 zapret
 
-#(Устарело, отключено) Включение обхода дискорда
-#cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
+#Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
+git clone https://github.com/IndeecFOX/zapret4rocket.git
+cp -r zapret4rocket/lists /opt/zapret/
+cp -r zapret4rocket/fake /opt/zapret/
+rm -rf zapret4rocket
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
@@ -70,6 +73,6 @@ sh -i zapret/install_easy.sh
 
 # Перезагрузка zapret с помощью systemd
 echo "Перезагружаем zapret..."
-sleep 2
+sleep 1
 systemctl restart zapret
 echo "Установка завершена"
