@@ -1,0 +1,4 @@
+ntc.party
+api.cloudflareclient.com
+i.ytimg.com
+www.youtube.com
