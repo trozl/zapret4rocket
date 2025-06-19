@@ -3,6 +3,7 @@
 #pre
 opkg update
 opkg install unzip
+opkg install git
 
 #directories
 cd /
@@ -31,8 +32,11 @@ unzip zapret-v71.1.zip
 rm -f zapret-v71.1.zip
 mv zapret-v71.1 zapret
 
-#Включение обхода дискорда (Отключено, заменено стратегией)
-#cp /opt/zapret/init.d/custom.d.examples.linux/50-discord /opt/zapret/init.d/sysv/custom.d/
+#Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
+git clone https://github.com/IndeecFOX/zapret4rocket.git
+cp -r zapret4rocket/lists /opt/zapret/
+cp -r zapret4rocket/fake /opt/zapret/files/
+rm -rf zapret4rocket
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
@@ -42,5 +46,5 @@ mv config.default /opt/zapret/
 sh zapret/install_bin.sh
 sh zapret/install_prereq.sh
 sh -i zapret/install_easy.sh
- sleep 2
 /etc/init.d/zapret restart
+echo "zeefeer перезапущен и полностью установлен"
