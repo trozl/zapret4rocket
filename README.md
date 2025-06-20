@@ -26,6 +26,7 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
 ```
+Upd 21.06.25 Пофикшены статтеры на YouTube (googlevideo.com передан другой стратегии)
 
 Upd 20.06.25: Обновление из-за РКН. Пофикшена работа сайтоа за CF. Обновляться полной командой, были добавлены tls файлы фейков в папку fakes.
 
