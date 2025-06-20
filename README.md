@@ -26,6 +26,9 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
 ```
+
+Upd 20.06.25: Обновление из-за РКН. Пофикшена работа сайтоа за CF. Обновляться полной командой, были добавлены tls файлы фейков в папку fakes.
+
 Upd 19.06.25: **Масштабное обновление стратегий.** Добавлено скачивание листов и фейков под новые стратегии KDS (ntc.party) убрана задежрка 2сек. Удалены старые закомментированные строки для ДС.
 
 Upd 12.06.25: zapret upd v70.6 >> v71.1. Minor fix(ytimg.com domen), add FILTER_TTL_EXPIRED_ICMP parametr for 71v).
