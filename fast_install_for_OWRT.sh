@@ -3,7 +3,7 @@
 #pre
 opkg update
 opkg install unzip
-opkg install git
+opkg install git-http
 
 #directories
 cd /
