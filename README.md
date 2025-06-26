@@ -1,4 +1,4 @@
-**Установит запрет v71.1 и рабочие на данный момент стратегии.**  
+![image](https://github.com/user-attachments/assets/dcb16498-ed6e-4af4-aacd-4750f12f1968)**Установит запрет v71.1 и рабочие на данный момент стратегии.**  
 Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
 Метод подключения к серверу выбираете самостоятельно.  
 Проверяется на на rocketcloud.ru ubuntu 22/24v, debian 12.  
@@ -26,12 +26,14 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
 ```
+Upd 26.06.25: Добавлено много стратегий для googlevideo.com. Для активации стереть около нужной "--skip". Стратегии для UPD(quick) и tcp.
+
 Upd 21.06.25v2: Возвращены старые стратегии GoogleVideo для фикса зависаний в части случаев.
 Upd 21.06.25 Пофикшены статтеры на YouTube (googlevideo.com передан другой стратегии)
 
 Upd 20.06.25: Обновление из-за РКН. Пофикшена работа сайтоа за CF. Обновляться полной командой, были добавлены tls файлы фейков в папку fakes.
 
-Upd 19.06.25: **Масштабное обновление стратегий.** Добавлено скачивание листов и фейков под новые стратегии KDS (ntc.party) убрана задежрка 2сек. Удалены старые закомментированные строки для ДС.
+Upd 19.06.25: Масштабное обновление стратегий. Добавлено скачивание листов и фейков под новые стратегии KDS (ntc.party) убрана задежрка 2сек. Удалены старые закомментированные строки для ДС.
 
 Upd 12.06.25: zapret upd v70.6 >> v71.1. Minor fix(ytimg.com domen), add FILTER_TTL_EXPIRED_ICMP parametr for 71v).
 
