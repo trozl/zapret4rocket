@@ -26,6 +26,7 @@ opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubuserc
 ```
 curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
 ```
+**ChangeLog:**
 Upd 26.06.25: Добавлено много стратегий для googlevideo.com. Для активации стереть около нужной "--skip". Стратегии для UPD(quick) и tcp.
 
 Upd 21.06.25v2: Возвращены старые стратегии GoogleVideo для фикса зависаний в части случаев.
