@@ -28,6 +28,7 @@ curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config
 ```
 **ChangeLog:**
 
+Upd 2.07.25: Добавлены комментарии к стратегиям в config файле. Ничего особого.
 Upd 26.06.25: Добавлено много стратегий для googlevideo.com. Для активации стереть около нужной "--skip". Стратегии для UPD(quick) и tcp.
 
 Upd 21.06.25v2: Возвращены старые стратегии GoogleVideo для фикса зависаний в части случаев.
