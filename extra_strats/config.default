@@ -1,0 +1,217 @@
+# Zeefeer update strats 26.06.25 + comments 2.07.25
+#KDS and flowseal special thx 
+# this file is included from init scripts
+# change values here
+
+# can help in case /tmp has not enough space
+#TMPDIR=/opt/zapret/tmp
+
+# redefine user for zapret daemons. required on Keenetic
+#WS_USER=nobody
+
+# override firewall type : iptables,nftables,ipfw
+FWTYPE=iptables
+# nftables only : set this to 0 to use pre-nat mode. default is post-nat.
+# pre-nat mode disables some bypass techniques for forwarded traffic but allows to see client IP addresses in debug log
+#POSTNAT=0
+
+# options for ipsets
+# maximum number of elements in sets. also used for nft sets
+SET_MAXELEM=522288
+# too low hashsize can cause memory allocation errors on low RAM systems , even if RAM is enough
+# too large hashsize will waste lots of RAM
+IPSET_OPT="hashsize 262144 maxelem $SET_MAXELEM"
+# dynamically generate additional ip. $1 = ipset/nfset/table name
+#IPSET_HOOK="/etc/zapret.ipset.hook"
+
+# options for ip2net. "-4" or "-6" auto added by ipset create script
+IP2NET_OPT4="--prefix-length=22-30 --v4-threshold=3/4"
+IP2NET_OPT6="--prefix-length=56-64 --v6-threshold=5"
+# options for auto hostlist
+AUTOHOSTLIST_RETRANS_THRESHOLD=3
+AUTOHOSTLIST_FAIL_THRESHOLD=3
+AUTOHOSTLIST_FAIL_TIME=60
+# 1 = debug autohostlist positives to ipset/zapret-hosts-auto-debug.log
+AUTOHOSTLIST_DEBUGLOG=0
+
+# number of parallel threads for domain list resolves
+MDIG_THREADS=30
+
+# ipset/*.sh can compress large lists
+GZIP_LISTS=1
+# command to reload ip/host lists after update
+# comment or leave empty for auto backend selection : ipset or ipfw if present
+# on BSD systems with PF no auto reloading happens. you must provide your own command
+# set to "-" to disable reload
+#LISTS_RELOAD="pfctl -f /etc/pf.conf"
+
+# mark bit used by nfqws to prevent loop
+DESYNC_MARK=0x40000000
+DESYNC_MARK_POSTNAT=0x20000000
+
+TPWS_SOCKS_ENABLE=0
+# tpws socks listens on this port on localhost and LAN interfaces
+TPPORT_SOCKS=987
+# use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
+# hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
+# <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
+TPWS_SOCKS_OPT="
+--filter-tcp=80 --methodeol <HOSTLIST> --new
+--filter-tcp=443 --split-pos=1,midsld --disorder <HOSTLIST>
+"
+
+TPWS_ENABLE=0
+TPWS_PORTS=80,443
+# use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
+# hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
+# <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
+TPWS_OPT="
+--filter-tcp=80 --methodeol <HOSTLIST> --new
+--filter-tcp=443 --split-pos=1,midsld --disorder <HOSTLIST>
+"
+
+NFQWS_ENABLE=1
+# redirect outgoing traffic with connbytes limiter applied in both directions.
+NFQWS_PORTS_TCP=80,443
+NFQWS_PORTS_UDP=443,50000-50099
+# PKT_OUT means connbytes dir original
+# PKT_IN means connbytes dir reply
+# this is --dpi-desync-cutoff=nX kernel mode implementation for linux. it saves a lot of CPU.
+NFQWS_TCP_PKT_OUT=$((6+$AUTOHOSTLIST_RETRANS_THRESHOLD))
+NFQWS_TCP_PKT_IN=3
+NFQWS_UDP_PKT_OUT=$((6+$AUTOHOSTLIST_RETRANS_THRESHOLD))
+NFQWS_UDP_PKT_IN=0
+# redirect outgoing traffic without connbytes limiter and incoming with connbytes limiter
+# normally it's needed only for stateless DPI that matches every packet in a single TCP session
+# typical example are plain HTTP keep alives
+# this mode can be very CPU consuming. enable with care !
+#NFQWS_PORTS_TCP_KEEPALIVE=80
+#NFQWS_PORTS_UDP_KEEPALIVE=
+# use <HOSTLIST> and <HOSTLIST_NOAUTO> placeholders to engage standard hostlists and autohostlist in ipset dir
+# hostlist markers are replaced to empty string if MODE_FILTER does not satisfy
+# <HOSTLIST_NOAUTO> appends ipset/zapret-hosts-auto.txt as normal list
+
+# just notes: --debug=@debug.log /opt/zapret/lists/ /opt/zapret/files/fake/
+#GoogleVideo first UDP strats!!! UDP for Quick. You maybe need change only TCP or UDP or both strats. For enable starats just delete --skip
+NFQWS_OPT="
+'Лист для исключения из фильтрации доменов по TCP. Можно просто на место example вписать нужные через запятую, можно в листы добавить'
+--filter-tcp=80,443 --hostlist-domains=example.com,test.com --hostlist=/opt/zapret/lists/netrogat.txt --new
+'Ниже идут запасные стратегии UDP для QUIC протокола для YouTube'
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/1.txt --dpi-desync=fake,ipfrag2 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_5.bin --dpi-desync-cutoff=n3 --dpi-desync-repeats=3 --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/2.txt --dpi-desync=fake,udplen --dpi-desync-udplen-increment=4 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_4.bin --dpi-desync-cutoff=n3 --dpi-desync-repeats=2 --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/3.txt --dpi-desync=fake,udplen --dpi-desync-udplen-increment=8 --dpi-desync-udplen-pattern=0xFEA82025 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_4.bin --dpi-desync-cutoff=n4 --dpi-desync-repeats=2 --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/4.txt --dpi-desync=fake,udplen --dpi-desync-udplen-increment=25 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_5.bin --dpi-desync-repeats=2 --dpi-desync-cutoff=n3 --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/5.txt --dpi-desync=fake --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_1.bin --dpi-desync-cutoff=n3 --dpi-desync-repeats=6 --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/6.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/7.txt --dpi-desync=fake --dpi-desync-repeats=8 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin --new
+--filter-udp=443 --hostlist=/opt/zapret/extra_strats/UDP/YT/8.txt --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_initial_www_google_com.bin --new
+'Ниже идут дополнительные стратегии только для TCP user domain листов имеющие приоритет над всеми другими блоками что ниже этого блока стратегий'
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/1.txt --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/2.txt --dpi-desync=split2 --dpi-desync-repeats=2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq,hopbyhop2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/3.txt --dpi-desync=fake,multisplit --dpi-desync-split-pos=sld+1 --dpi-desync-fake-tls=0x0F0F0E0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_14.bin --dpi-desync-fake-tls-mod=rnd,dupsid --dpi-desync-fooling=md5sig --dpi-desync-autottl --dup=2 --dup-fooling=md5sig --dup-autottl --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/4.txt --ipcache-hostname --dpi-desync=syndata,fake,multisplit --dpi-desync-split-pos=sld+1 --dpi-desync-fake-syndata=/opt/zapret/files/fake/tls_clienthello_7.bin --dpi-desync-fake-tls=0x0F0F0E0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_9.bin --dpi-desync-fake-tls-mod=rnd,dupsid --dpi-desync-fooling=md5sig --dpi-desync-autottl --dup=2 --dup-fooling=md5sig --dup-autottl --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/5.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=7,sld+1 --dpi-desync-fake-tls=0x0F0F0F0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_4.bin --dpi-desync-fake-tls-mod=rnd,dupsid,sni=fonts.google.com --dpi-desync-fooling=badseq --dpi-desync-autottl --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/6.txt --ipcache-hostname --dpi-desync=syndata,multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=1,sld+1,endsld-2 --dpi-desync-fake-syndata=/opt/zapret/files/fake/syn_packet.bin --dup=2 --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/7.txt --dpi-desync=fake --dpi-desync-autottl=2 --dpi-desync-repeats=6 --dpi-desync-fooling=badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/8.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/9.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=midsld --dpi-desync-repeats=8 --dpi-desync-fooling=md5sig,badseq --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/10.txt --dpi-desync=fake,split --dpi-desync-autottl=5 --dpi-desync-repeats=6 --dpi-desync-fooling=badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/11.txt --dpi-desync=split2 --dpi-desync-split-seqovl=652 --dpi-desync-split-pos=2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/12.txt --dpi-desync=split --dpi-desync-split-pos=1 --dpi-desync-autottl --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/13.txt --dpi-desync=fake,split2 --dpi-desync-repeats=6 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/14.txt --dpi-desync=fake --dpi-desync-fooling=md5sig --dpi-desync-fake-tls-mod=rnd,rndsni,padencap --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/15.txt --dpi-desync=split --dpi-desync-split-pos=1 --dpi-desync-autottl --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/16.txt --dpi-desync=fake,split2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/User/17.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=1,midsld --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+'Ниже идут дополнительные стратегии TCP для для всего, включая YouTube'
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/1.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/1.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/1.txt --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/2.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/2.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/2.txt --dpi-desync=split2 --dpi-desync-repeats=2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq,hopbyhop2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/3.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/3.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/3.txt --dpi-desync=fake,multisplit --dpi-desync-split-pos=sld+1 --dpi-desync-fake-tls=0x0F0F0E0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_14.bin --dpi-desync-fake-tls-mod=rnd,dupsid --dpi-desync-fooling=md5sig --dpi-desync-autottl --dup=2 --dup-fooling=md5sig --dup-autottl --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/4.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/4.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/4.txt --ipcache-hostname --dpi-desync=syndata,fake,multisplit --dpi-desync-split-pos=sld+1 --dpi-desync-fake-syndata=/opt/zapret/files/fake/tls_clienthello_7.bin --dpi-desync-fake-tls=0x0F0F0E0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_9.bin --dpi-desync-fake-tls-mod=rnd,dupsid --dpi-desync-fooling=md5sig --dpi-desync-autottl --dup=2 --dup-fooling=md5sig --dup-autottl --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/5.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/5.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/5.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=7,sld+1 --dpi-desync-fake-tls=0x0F0F0F0F --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_4.bin --dpi-desync-fake-tls-mod=rnd,dupsid,sni=fonts.google.com --dpi-desync-fooling=badseq --dpi-desync-autottl --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/6.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/6.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/6.txt --ipcache-hostname --dpi-desync=syndata,multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=1,sld+1,endsld-2 --dpi-desync-fake-syndata=/opt/zapret/files/fake/syn_packet.bin --dup=2 --dup-cutoff=n3 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/7.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/7.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/7.txt --dpi-desync=fake --dpi-desync-autottl=2 --dpi-desync-repeats=6 --dpi-desync-fooling=badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/8.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/8.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/8.txt --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/9.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/9.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/9.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=midsld --dpi-desync-repeats=8 --dpi-desync-fooling=md5sig,badseq --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/10.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/10.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/10.txt --dpi-desync=fake,split --dpi-desync-autottl=5 --dpi-desync-repeats=6 --dpi-desync-fooling=badseq --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/11.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/11.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/11.txt --dpi-desync=split2 --dpi-desync-split-seqovl=652 --dpi-desync-split-pos=2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/12.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/12.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/12.txt --dpi-desync=split --dpi-desync-split-pos=1 --dpi-desync-autottl --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/13.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/13.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/13.txt --dpi-desync=fake,split2 --dpi-desync-repeats=6 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/14.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/14.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/14.txt --dpi-desync=fake --dpi-desync-fooling=md5sig --dpi-desync-fake-tls-mod=rnd,rndsni,padencap --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/15.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/15.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/15.txt --dpi-desync=split --dpi-desync-split-pos=1 --dpi-desync-autottl --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/16.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/16.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/16.txt --dpi-desync=fake,split2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+--filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/17.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/17.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/17.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=1,midsld --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
+'Ниже 2 действующие стратегии для домена на котором находятся сами видео YouTube. Если выше не расскоментированны skip, то используются они по-умолчанию'
+--filter-tcp=443 --hostlist-domains=googlevideo.com --dpi-desync=fakedsplit --dpi-desync-fooling=md5sig --dpi-desync-split-pos=1 --new
+--filter-udp=443 --hostlist-domains=googlevideo.com --dpi-desync=fake --dpi-desync-repeats=6 --new
+'Стратегия для исходящих трансляций'
+--filter-tcp=443 --ipset=/opt/zapret/lists/russia-youtube-rtmps.txt --dpi-desync=syndata --dpi-desync-fake-syndata=/opt/zapret/files/fake/syn_packet.bin --dup=2 --dup-cutoff=n3 --new
+'Стратегия для YouTube по UDP QUIC протоколу. Включает в себя так же домен с самими видео. Если выше закомментировать стратегию с googlevideo.com, то будет использоваться эта, иначе только интерфейс и иные домены'
+--filter-udp=443 --hostlist=/opt/zapret/lists/russia-youtubeQ.txt --dpi-desync=fake,udplen --dpi-desync-udplen-increment=8 --dpi-desync-udplen-pattern=0x0F0F0E0F --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_6.bin --dpi-desync-cutoff=n3 --dpi-desync-repeats=2 --new
+'Стратегия для YouTube по TCP протоколу без домена GV'
+--filter-tcp=443 --hostlist=/opt/zapret/lists/russia-youtube.txt --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
+'Обход блокировки анонсеров rutracker.org'
+--filter-tcp=80 --hostlist-domains=t-ru.org --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=host+1 --dpi-desync-fake-http=0x0E0E0F0E --dpi-desync-fooling=md5sig --new
+'Обход блокировок различных сайтов по http'
+--filter-tcp=80 --hostlist=/opt/zapret/lists/mycdnlist.txt --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=sld+1 --dpi-desync-fake-http=/opt/zapret/files/fake/http_fake_MS.bin --dpi-desync-fooling=md5sig --dup=2 --dup-fooling=md5sig --dup-cutoff=n3 --new
+'Обход блокировок различных сайтов по httpS, а так же инсты и запасная стратегия для GV по TCP. GV стратеги применится только если все верхние за skip'
+--filter-tcp=443 --hostlist-domains=instagram.com,googlevideo.com --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --hostlist=/opt/zapret/lists/mycdnlist.txt --dpi-desync=split2 --dpi-desync-repeats=2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq,hopbyhop2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_2.bin --new
+'Обход блокировок указанных в стратегии сайтов по httpS'
+--filter-tcp=443 --hostlist-domains=updates.discord.com,stable.dl2.discordapp.net,animego.online,animejoy.ru,rutracker.org,static.rutracker.cc,pixiv.net,cdn77.com --dpi-desync=multisplit --dpi-desync-split-seqovl=293 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_12.bin --new
+'Обход блокировок указанных в стратегии сайтов по httpS'
+--filter-tcp=443 --hostlist-domains=awsglobalaccelerator.com,cloudfront.net,amazon.com,amazonaws.com,awsstatic.com --dpi-desync=multisplit --dpi-desync-split-seqovl=211 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_5.bin --new
+'Обход блокировок войса в Discord'
+--filter-l3=ipv6 --filter-udp=50000-50090 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl6 --dup=2 --dup-autottl6 --dup-cutoff=n3 --new
+--filter-l3=ipv4 --filter-udp=50000-50090 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3 --new
+'Обход блокировок cloudflare. Обход по ip, по ipv6 и ipv4. Могут иногда вызывать проблемы различные. Можно закомменитровать skip ом или добавить нужные ip исключений в статегии после exclude ip'
+--filter-l3=ipv6 --filter-tcp=443 --ipset=/opt/zapret/lists/cloudflare-ipset_v6.txt --ipset-exclude-ip=2606:4700:4700::1111,2606:4700:4700::1001 --dpi-desync=multisplit --dpi-desync-split-seqovl=226 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_18.bin --dup=2 --dup-cutoff=n3 --new
+--filter-l3=ipv4 --filter-tcp=443 --ipset=/opt/zapret/lists/cloudflare-ipset.txt --ipset-exclude-ip=1.1.1.1,1.0.0.1,212.109.195.93,83.220.169.155,141.105.71.21,18.244.96.0/19,18.244.128.0/19 --dpi-desync=multisplit --dpi-desync-split-seqovl=226 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_18.bin --dup=2 --dup-cutoff=n3 --new
+'Стратегии для сайтов попавших в автодетект заблокированных'
+--filter-l3=ipv4 --filter-tcp=80 --hostlist-auto=/opt/zapret/lists/autohostlist.txt --hostlist-exclude=/opt/zapret/lists/netrogat.txt --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=host+1 --dpi-desync-fake-http=0x0E0E0F0E --dpi-desync-fooling=md5sig --new
+--filter-l3=ipv4 --filter-tcp=443 --hostlist-auto=/opt/zapret/lists/autohostlist.txt --hostlist-exclude=/opt/zapret/lists/netrogat.txt --dpi-desync=fake,fakedsplit --dpi-desync-split-pos=1 --dpi-desync-fake-tls=/opt/zapret/files/fake/tls_clienthello_9.bin --dpi-desync-fooling=badseq --dpi-desync-autottl
+"
+
+# none,ipset,hostlist,autohostlist
+MODE_FILTER=autohostlist
+
+# openwrt only : donttouch,none,software,hardware
+FLOWOFFLOAD=donttouch
+
+# openwrt: specify networks to be treated as LAN. default is "lan"
+#OPENWRT_LAN="lan lan2 lan3"
+# openwrt: specify networks to be treated as WAN. default wans are interfaces with default route
+#OPENWRT_WAN4="wan vpn"
+#OPENWRT_WAN6="wan6 vpn6"
+
+# for routers based on desktop linux and macos. has no effect in openwrt.
+# CHOOSE LAN and optinally WAN/WAN6 NETWORK INTERFACES
+# or leave them commented if its not router
+# it's possible to specify multiple interfaces like this : IFACE_LAN="eth0 eth1 eth2"
+# if IFACE_WAN6 is not defined it take the value of IFACE_WAN
+#IFACE_LAN=eth0
+#IFACE_WAN=eth0
+#IFACE_WAN6="ipsec0 wireguard0 he_net"
+
+# should start/stop command of init scripts apply firewall rules ?
+# not applicable to openwrt with firewall3+iptables
+INIT_APPLY_FW=1
+# firewall apply hooks
+#INIT_FW_PRE_UP_HOOK="/etc/firewall.zapret.hook.pre_up"
+#INIT_FW_POST_UP_HOOK="/etc/firewall.zapret.hook.post_up"
+#INIT_FW_PRE_DOWN_HOOK="/etc/firewall.zapret.hook.pre_down"
+#INIT_FW_POST_DOWN_HOOK="/etc/firewall.zapret.hook.post_down"
+
+# do not work with ipv4
+#DISABLE_IPV4=1
+# do not work with ipv6
+#DISABLE_IPV6=1
+
+# drop icmp time exceeded messages for nfqws tampered connections
+# in POSTNAT mode this can interfere with default mtr/traceroute in tcp or udp mode. use source port not redirected to nfqws
+# set to 0 if you are not expecting connection breakage due to icmp in response to TCP SYN or UDP
+FILTER_TTL_EXPIRED_ICMP=1
+
+# select which init script will be used to get ip or host list
+# possible values : get_user.sh get_antizapret.sh get_combined.sh get_reestr.sh get_hostlist.sh
+# comment if not required
+#GETLIST=get_refilter_domains.sh
