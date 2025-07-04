@@ -60,6 +60,7 @@ mv zapret-v71.1 zapret
 git clone https://github.com/IndeecFOX/zapret4rocket.git
 cp -r zapret4rocket/lists /opt/zapret/
 cp -r zapret4rocket/fake /opt/zapret/files/
+cp -r zapret4rocket/extra_strats /opt/zapret/
 rm -rf zapret4rocket
 #chmod -R 777 /opt/zapret/fake
 #chmod -R 777 /opt/zapret/lists
