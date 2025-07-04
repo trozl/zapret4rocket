@@ -62,7 +62,8 @@ elif [[ "$clean_answer" == "1" ]]; then
 
     # После цикла
     echo -n > "/opt/zapret/extra_strats/UDP/YT/8.txt"
-	echo "End strategy lists. All was tried"
+    echo "End strategy lists. All was tried"
+    exit 0
 	
 elif [[ "$clean_answer" == "2" ]]; then
     echo "Mode: Finding strategy for YT (TCP) activated"
@@ -91,8 +92,9 @@ elif [[ "$clean_answer" == "2" ]]; then
 
     # После цикла
     echo -n > "/opt/zapret/extra_strats/TCP/YT/17.txt"
-	echo "End strategy lists. All was tried"
-	
+    echo "End strategy lists. All was tried"
+    exit 0
+    
 elif [[ "$clean_answer" == "3" ]]; then
     echo "Mode: Finding strategy for RKN lists activated"
     # Цикл от 1 до 17
@@ -120,8 +122,9 @@ elif [[ "$clean_answer" == "3" ]]; then
 
     # После цикла
     echo -n > "/opt/zapret/extra_strats/TCP/RKN/17.txt"
-	echo "End strategy lists. All was tried"
-	
+    echo "End strategy lists. All was tried"
+    exit 0
+
 elif [[ "$clean_answer" == "4" ]]; then
     echo "Mode: Finding strategy for new domain activated"
 
@@ -164,8 +167,9 @@ elif [[ "$clean_answer" == "4" ]]; then
 
     # После цикла
     echo -n > "/opt/zapret/extra_strats/TCP/temp/17.txt"
-	echo "End strategy lists. All was tried"
-	
+    echo "End strategy lists. All was tried"
+    exit 0
+ 
 else
     echo "Skipping finding extra strats (default action)"
 fi
