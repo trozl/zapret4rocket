@@ -27,9 +27,11 @@ else
 fi
 
 # Распаковка архива zapret и его удаление
-wget -O zapret-v71.1.zip "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1.zip"
-unzip zapret-v71.1.zip
-rm -f zapret-v71.1.zip
+wget -O zapret-v71.1-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
+tar -xzf zapret-v71.1-openwrt-embedded.tar.gz
+rm -f zapret-v71.1-openwrt-embedded.tar.gz
+tar -xf zapret-v71.1-openwrt-embedded.tar
+rm -f zapret-v71.1-openwrt-embedded.tar
 mv zapret-v71.1 zapret
 
 #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
