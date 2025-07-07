@@ -212,7 +212,7 @@ rm -rf zapret4rocket
 #chmod -R 777 /opt/zapret/lists
 
 #Копирование нашего конфига на замену стандартному
-wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
+wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
 mv config.default /opt/zapret/
 
 # Запуск установочных скриптов
