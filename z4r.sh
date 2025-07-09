@@ -1,4 +1,7 @@
 #!/bin/bash
+#wget -qO- https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh | bash
+#
+
 set -e
 
 #Чтобы удобнее красить
@@ -463,3 +466,5 @@ elif [[ "$release" == "entware" ]]; then
 else
     echo "Для этой ОС нет подходящей функции."
 fi
+#Удаление скрипта
+rm -- "$0"
