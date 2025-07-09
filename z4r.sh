@@ -1,6 +1,5 @@
 #!/bin/bash
-#wget -qO- https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh | bash
-#
+#Команда установки curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh  && bash z4r.sh
 
 set -e
 
