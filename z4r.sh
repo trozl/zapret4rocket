@@ -23,16 +23,6 @@ else
 	release="Entware_Keenetic"
 fi
 echo "OS: $release"
-if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
-    VPS
-elif [[ "$release" == "openwrt" ]]; then
-    WRT
-elif [[ "$release" == "entware" ]]; then
-    #Entware
-    echo "Заготовка"
-else
-    echo "Для этой ОС нет подходящей функции."
-fi
 
 VPS() {
  #Запрос на установку 3x-ui или аналогов
@@ -461,3 +451,15 @@ WRT() {
  /etc/init.d/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
+
+#Запуск скрипта под нужную версию
+if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
+    VPS
+elif [[ "$release" == "openwrt" ]]; then
+    WRT
+elif [[ "$release" == "entware" ]]; then
+    #Entware
+    echo "Заготовка"
+else
+    echo "Для этой ОС нет подходящей функции."
+fi
