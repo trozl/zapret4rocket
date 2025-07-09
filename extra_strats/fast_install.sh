@@ -30,7 +30,7 @@ fi
 
 #Запрос на подбор стратегий
 if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
- read -p "Find strategy? (zeefeer/zapret must be installed early) Write digital or press Enter: (1: YT (UDP QUIC), 2: YT (TCP), 3: RKN, 4: New domain, Enter for none): " answer
+ read -p $'Need find strategy? Write digital or press Enter for skip:\n1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. New domain\nEnter for none ' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
  if [[ -z "$clean_answer" ]]; then
@@ -174,6 +174,7 @@ if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
  else
     echo "Skipping finding extra strats (default action)"
  fi
+else
  echo "zapret не установлен, пропускаем скрипт подбора профиля"
 fi
 
