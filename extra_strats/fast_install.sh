@@ -2,7 +2,7 @@
 set -e
 
 #Запрос на установку 3x-ui или аналогов
-read -p "Install tunneling software?: (3xui, marzban, wg, 3proxy or Enter for none): " answer
+read -p $'\033[33mInstall tunneling software?\033[0m \033[32m(3xui, marzban, wg, 3proxy or Enter for none): \033[0m' answer
 # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 if [[ -z "$clean_answer" ]]; then
@@ -212,8 +212,6 @@ cp -r zapret4rocket/lists /opt/zapret/
 cp -r zapret4rocket/fake /opt/zapret/files/
 cp -r zapret4rocket/extra_strats /opt/zapret/
 rm -rf zapret4rocket
-#chmod -R 777 /opt/zapret/fake
-#chmod -R 777 /opt/zapret/lists
 
 #Копирование нашего конфига на замену стандартному
 wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
