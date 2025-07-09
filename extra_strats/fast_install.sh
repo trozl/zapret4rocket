@@ -174,6 +174,7 @@ if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
  else
     echo "Skipping finding extra strats (default action)"
  fi
+ echo "zapret не установлен, пропускаем скрипт подбора профиля"
 fi
 
 # Обновление пакетов и установка unzip
