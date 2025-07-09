@@ -29,7 +29,7 @@ else
 fi
 
 #Запрос на подбор стратегий
-if [ -f "zapret/uninstall_easy.sh" ]; then
+if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
  read -p "Find strategy? (zeefeer/zapret must be installed early) Write digital or press Enter: (1: YT (UDP QUIC), 2: YT (TCP), 3: RKN, 4: New domain, Enter for none): " answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
