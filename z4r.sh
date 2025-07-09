@@ -29,6 +29,7 @@ elif [[ "$release" == "openwrt" ]]; then
     WRT
 elif [[ "$release" == "entware" ]]; then
     #Entware
+    echo "Заготовка"
 else
     echo "Для этой ОС нет подходящей функции."
 fi
