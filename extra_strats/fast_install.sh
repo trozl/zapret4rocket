@@ -28,14 +28,15 @@ else
     echo "Skipping tunneling soft installation."
 fi
 
-#Запрос на подбор стратегий 
-read -p "Find strategy? (zeefeer/zapret must be installed early) Write digital or press Enter: (1: YT (UDP QUIC), 2: YT (TCP), 3: RKN, 4: New domain, Enter for none): " answer
-clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
+#Запрос на подбор стратегий
+if [ -f "zapret/uninstall_easy.sh" ]; then
+ read -p "Find strategy? (zeefeer/zapret must be installed early) Write digital or press Enter: (1: YT (UDP QUIC), 2: YT (TCP), 3: RKN, 4: New domain, Enter for none): " answer
+ clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
-if [[ -z "$clean_answer" ]]; then
-    echo "Skipping finding extra strats (default action)"
+ if [[ -z "$clean_answer" ]]; then
+     echo "Skipping finding extra strats (default action)"
 
-elif [[ "$clean_answer" == "1" ]]; then
+ elif [[ "$clean_answer" == "1" ]]; then
     echo "Mode: Finding strategy for YT (UDP QUIC) activated"
     # Цикл от 1 до 8
     for i in {1..8}; do
@@ -65,7 +66,7 @@ elif [[ "$clean_answer" == "1" ]]; then
     echo "End strategy lists. All was tried"
     exit 0
 	
-elif [[ "$clean_answer" == "2" ]]; then
+ elif [[ "$clean_answer" == "2" ]]; then
     echo "Mode: Finding strategy for YT (TCP) activated"
     # Цикл от 1 до 17
     for i in {1..17}; do
@@ -95,7 +96,7 @@ elif [[ "$clean_answer" == "2" ]]; then
     echo "End strategy lists. All was tried"
     exit 0
     
-elif [[ "$clean_answer" == "3" ]]; then
+ elif [[ "$clean_answer" == "3" ]]; then
     echo "Mode: Finding strategy for RKN lists activated"
     # Цикл от 1 до 17
     for i in {1..17}; do
@@ -125,7 +126,7 @@ elif [[ "$clean_answer" == "3" ]]; then
     echo "End strategy lists. All was tried"
     exit 0
 
-elif [[ "$clean_answer" == "4" ]]; then
+ elif [[ "$clean_answer" == "4" ]]; then
     echo "Mode: Finding strategy for new domain activated"
 
 	read -p "Input domain please (example, mydomain.com): " user_domain
@@ -170,8 +171,9 @@ elif [[ "$clean_answer" == "4" ]]; then
     echo "End strategy lists. All was tried"
     exit 0
  
-else
+ else
     echo "Skipping finding extra strats (default action)"
+ fi
 fi
 
 # Обновление пакетов и установка unzip
