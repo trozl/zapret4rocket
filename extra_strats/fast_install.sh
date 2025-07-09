@@ -30,7 +30,7 @@ fi
 
 #Запрос на подбор стратегий
 if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
- read -p $'Need find strategy? Write digital or press Enter for skip:\n1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. New domain\nEnter for none ' answer
+ read -p $'\033[33mNeed find strategy? Write digital or press Enter for skip:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. New domain\nEnter for none\033[0m ' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
  if [[ -z "$clean_answer" ]]; then
