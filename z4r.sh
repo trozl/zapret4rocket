@@ -274,7 +274,7 @@ WRT() {
  
          cp "/opt/zapret/extra_strats/UDP/YT/List.txt" "/opt/zapret/extra_strats/UDP/YT/${i}.txt"
  
-         systemctl restart zapret
+         /etc/init.d/zapret restart
  
          echo "Strategy $i activated"
  
@@ -304,7 +304,7 @@ WRT() {
  
          cp "/opt/zapret/extra_strats/TCP/YT/List.txt" "/opt/zapret/extra_strats/TCP/YT/${i}.txt"
  
-         systemctl restart zapret
+         /etc/init.d/zapret restart
  
          echo "Strategy $i activated"
  
@@ -334,7 +334,7 @@ WRT() {
  
          cp "/opt/zapret/extra_strats/TCP/RKN/List.txt" "/opt/zapret/extra_strats/TCP/RKN/${i}.txt"
  
-         systemctl restart zapret
+         /etc/init.d/zapret restart
  
          echo "Strategy $i activated"
  
@@ -376,7 +376,7 @@ WRT() {
  
          echo "$user_domain" > "/opt/zapret/extra_strats/TCP/temp/${i}.txt"
  
-         systemctl restart zapret
+         /etc/init.d/zapret restart
  
          echo "Strategy $i activated"
  
