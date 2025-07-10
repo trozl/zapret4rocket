@@ -1,5 +1,5 @@
 #!/bin/bash
-#Команда установки curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh
+#Команда установки curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
 
 set -e
 
@@ -465,5 +465,3 @@ elif [[ "$release" == "entware" ]]; then
 else
     echo "Для этой ОС нет подходящей функции."
 fi
-#Удаление скрипта
-rm -- "$0"
