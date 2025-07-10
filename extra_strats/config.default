@@ -142,7 +142,7 @@ NFQWS_OPT="
 --filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/16.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/16.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/16.txt --dpi-desync=fake,split2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq --dpi-desync-repeats=8 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_www_google_com.bin --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
 --filter-tcp=443 --hostlist=/opt/zapret/extra_strats/TCP/YT/17.txt --hostlist=/opt/zapret/extra_strats/TCP/RKN/17.txt --hostlist=/opt/zapret/extra_strats/TCP/temp/17.txt --dpi-desync=fake,multidisorder --dpi-desync-split-pos=1,midsld --dpi-desync-repeats=11 --dpi-desync-fooling=md5sig --dpi-desync-fake-tls-mod=rnd,dupsid,sni=www.google.com --new
 'Стратегия обхода блока DNS для работы YT на телике (тестово), заодно мб на другое повлияет
---filter-tcp=53 --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
+--filter-tcp=53 --hostlist-domains=youtube.com --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
 'Ниже 2 действующие стратегии для домена на котором находятся сами видео YouTube. Если выше не расскоментированны skip, то используются они по-умолчанию'
 --filter-tcp=443 --hostlist-domains=googlevideo.com --dpi-desync=fakedsplit --dpi-desync-fooling=md5sig --dpi-desync-split-pos=1 --new
 --filter-udp=443 --hostlist-domains=googlevideo.com --dpi-desync=fake --dpi-desync-repeats=6 --new
