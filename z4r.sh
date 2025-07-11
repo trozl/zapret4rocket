@@ -28,7 +28,7 @@ echo "OS: $release"
 
 VPS() {
  #Запрос на установку 3x-ui или аналогов
- read -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy or Enter для пропуска): \033[0m' answer
+ read -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy или Enter для пропуска): \033[0m' answer
  # Удаляем лишние символы и пробелы, приводим к верхнему регистру
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  if [[ -z "$clean_answer" ]]; then
@@ -57,7 +57,7 @@ VPS() {
 
  #Запрос на подбор стратегий
  if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
-  read -p $'\033[33mПодобрать альтернативную стратегию? Укажите цифру или нажмите Enter для пропуска:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Добавить домен\nEnter for none\033[0m ' answer
+  read -p $'\033[33mПодобрать альтернативную стратегию? Укажите цифру или нажмите Enter для пропуска:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Добавить домен\nEnter для пропуска\033[0m ' answer
   clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
   if [[ -z "$clean_answer" ]]; then
@@ -258,7 +258,7 @@ VPS() {
 WRT() {
  #Запрос на подбор стратегий
  if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
-  read -p $'\033[33mПодобрать альтернативную стратегию? Укажите цифру или нажмите Enter для пропуска:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Добавить домен\nEnter for none\033[0m ' answer
+  read -p $'\033[33mПодобрать альтернативную стратегию? Укажите цифру или нажмите Enter для пропуска:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Добавить домен\nEnter для пропуска\033[0m ' answer
   clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
 
   if [[ -z "$clean_answer" ]]; then
