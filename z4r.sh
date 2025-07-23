@@ -29,7 +29,89 @@ else
 fi
 echo "OS: $release"
 
-Strats_Tryer(){
+try_strategies() {
+    local count="$1"
+    local base_path="$2"
+    local list_file="$3"
+    local final_action="$4"
+
+    for ((i=1; i<=count; i++)); do
+        if [[ $i -ge 2 ]]; then
+            prev=$((i - 1))
+            echo -n > "$base_path/${prev}.txt"
+        fi
+
+        if [[ "$list_file" != "/dev/null" ]]; then
+            cp "$list_file" "$base_path/${i}.txt"
+        else
+            echo "$user_domain" > "$base_path/${i}.txt"
+        fi
+
+        /opt/zapret/init.d/sysv/zapret restart
+        echo "Стратегия номер $i активирована"
+
+        read -p "Проверьте работоспособность и введите (\"Y\" - сохранить, Enter - далее): " answer
+        clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+        if [[ "$clean_answer" == "Y" ]]; then
+            echo "Стратегия $i сохранена. Выходим."
+            eval "$final_action"
+            exit 0
+        fi
+    done
+
+    echo -n > "$base_path/${count}.txt"
+    echo "Все стратегии испробованы. Ничего не подошло."
+    exit 0
+}
+
+Strats_Tryer() {
+    if [ ! -f "/opt/zapret/uninstall_easy.sh" ]; then
+        echo "zapret не установлен, пропускаем скрипт подбора профиля"
+        return
+    fi
+
+    read -p $'\033[33mПодобрать стратегию? (1-4 или Enter для пропуска):\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Кастомный домен\033[0m\n' answer
+    clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+
+    case "$clean_answer" in
+        "1")
+            echo "Режим YT (UDP QUIC)"
+            try_strategies 8 "/opt/zapret/extra_strats/UDP/YT" "/opt/zapret/extra_strats/UDP/YT/List.txt" ""
+            ;;
+        "2")
+            echo "Режим YT (TCP)"
+            try_strategies 17 "/opt/zapret/extra_strats/TCP/YT" "/opt/zapret/extra_strats/TCP/YT/List.txt" ""
+            ;;
+        "3")
+            echo "Режим RKN"
+            try_strategies 17 "/opt/zapret/extra_strats/TCP/RKN" "/opt/zapret/extra_strats/TCP/RKN/List.txt" ""
+            ;;
+        "4")
+            echo "Режим кастомного домена"
+            read -p "Введите домен (например, mydomain.com): " user_domain
+            user_domain=$(echo "$user_domain" | tr -d '[:space:]')
+
+            # Отключаем активный RKN-лист временно
+            for emp in {1..17}; do
+                file="/opt/zapret/extra_strats/TCP/RKN/${emp}.txt"
+                if [[ -s "$file" ]]; then
+                    echo -n > "$file"
+                    break
+                fi
+            done
+
+            try_strategies 17 "/opt/zapret/extra_strats/TCP/temp" "/dev/null" \
+            "echo -n > \"/opt/zapret/extra_strats/TCP/temp/\${i}.txt\"; \
+             echo \"$user_domain\" > \"/opt/zapret/extra_strats/TCP/User/\${i}.txt\"; \
+             cp \"/opt/zapret/extra_strats/TCP/RKN/List.txt\" \"/opt/zapret/extra_strats/TCP/RKN/${emp}.txt\""
+            ;;
+        *)
+            echo "Пропуск подбора альтернативной стратегии"
+            ;;
+    esac
+}
+
+Strats_TryerOld(){
  #Запрос на подбор стратегий
  if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
   read -p $'\033[33mПодобрать альтернативную стратегию? Укажите цифру или нажмите Enter для пропуска:\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Добавить домен\nEnter для пропуска\033[0m ' answer
@@ -253,8 +335,6 @@ VPS() {
  mv config.default /opt/zapret/
 
  # Запуск установочных скриптов
- #sh zapret/install_bin.sh
- #sh zapret/install_prereq.sh
  sh -i zapret/install_easy.sh
 
  # Перезагрузка zapret с помощью systemd
@@ -318,8 +398,6 @@ WRT() {
  mv config.default /opt/zapret/
  
  # Запуск установочных скриптов
- #sh zapret/install_bin.sh
- #sh zapret/install_prereq.sh
  sh -i zapret/install_easy.sh
  /opt/zapret/init.d/sysv/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
@@ -389,15 +467,13 @@ Entware() {
  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
  # Запуск установочных скриптов
- #sh zapret/install_bin.sh
- #sh zapret/install_prereq.sh
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  sh -i zapret/install_easy.sh
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
  echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
  /opt/zapret/init.d/sysv/zapret restart
- echo "zeefeer перезапущен и полностью установлен"
+ echo "${green}zeefeer перезапущен и полностью установлен${plain}"
 }
 
 #Запуск скрипта под нужную версию
