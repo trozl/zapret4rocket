@@ -18,7 +18,7 @@ elif [[ -f /usr/lib/os-release ]]; then
     source /usr/lib/os-release
     release=$ID
 elif [[ -f /etc/entware_release ]]; then
-    source /etc/entware_release
+    source /opt/etc/entware_release
     release=$ID
 else
     echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
