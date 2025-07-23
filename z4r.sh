@@ -661,6 +661,7 @@ Entware() {
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  mv config.default /opt/zapret/
+ #Раскомменчивание юзера под keenetic
  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
  # Запуск установочных скриптов
