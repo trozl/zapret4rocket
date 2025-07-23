@@ -50,7 +50,7 @@ VPS() {
      #mv del.proxyauth .proxyauth
      #mv .proxyauth /etc/3proxy/
      #mv 3proxy.cfg /etc/3proxy/
-     systemctl restart 3proxy
+     /opt/zapret/init.d/sysv/zapret restart
  elif [[ "$clean_answer" == "MARZBAN" ]]; then
      echo "Установка Marzban"
      bash -c "$(curl -sL https://github.com/Gozargah/Marzban-scripts/raw/master/marzban.sh)" @ install
@@ -78,7 +78,7 @@ VPS() {
 
          cp "/opt/zapret/extra_strats/UDP/YT/List.txt" "/opt/zapret/extra_strats/UDP/YT/${i}.txt"
 
-         systemctl restart zapret
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -108,7 +108,7 @@ VPS() {
 
          cp "/opt/zapret/extra_strats/TCP/YT/List.txt" "/opt/zapret/extra_strats/TCP/YT/${i}.txt"
 
-         systemctl restart zapret
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -138,7 +138,7 @@ VPS() {
 
          cp "/opt/zapret/extra_strats/TCP/RKN/List.txt" "/opt/zapret/extra_strats/TCP/RKN/${i}.txt"
 
-         systemctl restart zapret
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -180,7 +180,7 @@ VPS() {
 
          echo "$user_domain" > "/opt/zapret/extra_strats/TCP/temp/${i}.txt"
 
-         systemctl restart zapret
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -254,7 +254,7 @@ VPS() {
 
  # Перезагрузка zapret с помощью systemd
  echo "Перезагружаем zapret..."
- systemctl restart zapret
+ /opt/zapret/init.d/sysv/zapret restart
  echo "Установка завершена"
 }
 
@@ -279,7 +279,7 @@ WRT() {
 
          cp "/opt/zapret/extra_strats/UDP/YT/List.txt" "/opt/zapret/extra_strats/UDP/YT/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -309,7 +309,7 @@ WRT() {
 
          cp "/opt/zapret/extra_strats/TCP/YT/List.txt" "/opt/zapret/extra_strats/TCP/YT/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -339,7 +339,7 @@ WRT() {
 
          cp "/opt/zapret/extra_strats/TCP/RKN/List.txt" "/opt/zapret/extra_strats/TCP/RKN/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -381,7 +381,7 @@ WRT() {
 
          echo "$user_domain" > "/opt/zapret/extra_strats/TCP/temp/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -463,7 +463,7 @@ WRT() {
  #sh zapret/install_bin.sh
  #sh zapret/install_prereq.sh
  sh -i zapret/install_easy.sh
- /etc/init.d/zapret restart
+ /opt/zapret/init.d/sysv/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
 
@@ -488,7 +488,7 @@ Entware() {
 
          cp "/opt/zapret/extra_strats/UDP/YT/List.txt" "/opt/zapret/extra_strats/UDP/YT/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -518,7 +518,7 @@ Entware() {
 
          cp "/opt/zapret/extra_strats/TCP/YT/List.txt" "/opt/zapret/extra_strats/TCP/YT/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -548,7 +548,7 @@ Entware() {
 
          cp "/opt/zapret/extra_strats/TCP/RKN/List.txt" "/opt/zapret/extra_strats/TCP/RKN/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -590,7 +590,7 @@ Entware() {
 
          echo "$user_domain" > "/opt/zapret/extra_strats/TCP/temp/${i}.txt"
 
-         /etc/init.d/zapret restart
+         /opt/zapret/init.d/sysv/zapret restart
 
          echo "Стратегия номер $i активирована"
 
@@ -685,7 +685,7 @@ Entware() {
  sh -i zapret/install_easy.sh
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
  echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
- /opt/etc/init.d/S90-zapret restart
+ /opt/zapret/init.d/sysv/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
 
