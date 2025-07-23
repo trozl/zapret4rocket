@@ -667,7 +667,7 @@ Entware() {
  sh zapret/install_bin.sh
  sh zapret/install_prereq.sh
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
- sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' common/installer.sh
+ sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  sh -i zapret/install_easy.sh
  /etc/init.d/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
