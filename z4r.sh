@@ -186,9 +186,8 @@ VPS() {
  sh -i zapret/install_easy.sh
 
  # Перезагрузка zapret с помощью systemd
- echo "Перезагружаем zapret..."
  /opt/zapret/init.d/sysv/zapret restart
- echo "Установка завершена"
+ echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
 
 WRT() {
@@ -248,7 +247,7 @@ WRT() {
  # Запуск установочных скриптов
  sh -i zapret/install_easy.sh
  /opt/zapret/init.d/sysv/zapret restart
- echo "zeefeer перезапущен и полностью установлен"
+ echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
 
 Entware() {
@@ -321,7 +320,7 @@ Entware() {
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
  echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
  /opt/zapret/init.d/sysv/zapret restart
- echo "${green}zeefeer перезапущен и полностью установлен${plain}"
+ echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
 
 #Запуск скрипта под нужную версию
