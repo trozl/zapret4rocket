@@ -1,9 +1,9 @@
 #!/bin/bash
 #Команда установки
 #curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
-#В случае отсутствия curl: 
-#Для keenetic entware/OWRT: opkg update && opkg install curl
-#Для Ubuntu/Debian: apt update && apt install curl
+#В случае отсутствия curl или bash: 
+#Для keenetic entware/OWRT: opkg update && opkg install curl bash
+#Для Ubuntu/Debian: apt update && apt install curl bash
 
 set -e
 
