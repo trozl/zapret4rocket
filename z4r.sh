@@ -632,7 +632,7 @@ Entware() {
  #Удаление старого запрета, если есть
  if [ -f "zapret/uninstall_easy.sh" ]; then
      echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     sh zapret/uninstall_easy.sh
+     sh echo Y | zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
      echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
@@ -663,9 +663,9 @@ Entware() {
  mv config.default /opt/zapret/
  
  # Запуск установочных скриптов
- echo Y | sh zapret/install_bin.sh
+ sh zapret/install_bin.sh
  sh zapret/install_prereq.sh
- sh -i zapret/install_easy.sh
+ printf "\n\nY\n" | sh -i zapret/install_easy.sh
  /etc/init.d/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
