@@ -32,7 +32,9 @@ curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/mas
 ```
 
 В случае отсутствия curl или bash: 
+
 Для keenetic entware/OWRT: opkg update && opkg install curl bash 
+
 Для Ubuntu/Debian: apt update && apt install curl bash 
 
 **ChangeLog:**
