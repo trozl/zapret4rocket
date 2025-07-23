@@ -29,7 +29,8 @@ curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config
 **Beta с функционалом подбора стратегий для VPS/OWRT/Keenetic(Entware)**
 ``` 
 curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
-``` 
+```
+
 В случае отсутствия curl или bash: 
 Для keenetic entware/OWRT: opkg update && opkg install curl bash
 Для Ubuntu/Debian: apt update && apt install curl bash
