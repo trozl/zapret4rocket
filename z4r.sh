@@ -412,7 +412,12 @@ WRT() {
  
  #directories
  cd /
- mkdir opt
+ if [ -d /opt ]; then
+     echo "Каталог /opt уже существует"
+ else
+     echo "Создаём каталог /opt"
+     mkdir /opt
+ fi
  cd /opt
  
  #Удаление старого запрета, если есть
@@ -616,7 +621,12 @@ Entware() {
  
  #directories
  cd /
- mkdir opt
+ if [ -d /opt ]; then
+     echo "Каталог /opt уже существует"
+ else
+     echo "Создаём каталог /opt"
+     mkdir /opt
+ fi
  cd /opt
  
  #Удаление старого запрета, если есть
