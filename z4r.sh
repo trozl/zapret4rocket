@@ -1,5 +1,9 @@
 #!/bin/bash
-#Команда установки curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
+#Команда установки
+#curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
+#В случае отсутствия curl: 
+#Для keenetic entware/OWRT: opkg update && opkg install curl
+#Для Ubuntu/Debian: apt update && apt install curl
 
 set -e
 
@@ -614,10 +618,8 @@ Entware() {
   echo "zapret не установлен, пропускаем скрипт подбора профиля"
  fi
  
- #pre
- opkg update
- opkg install unzip
- opkg install git-http
+ #preinstal env
+ opkg install git-http coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
  
  #directories
  cd /
@@ -665,8 +667,8 @@ Entware() {
  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
  # Запуск установочных скриптов
- sh zapret/install_bin.sh
- sh zapret/install_prereq.sh
+ #sh zapret/install_bin.sh
+ #sh zapret/install_prereq.sh
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  sh -i zapret/install_easy.sh
