@@ -653,12 +653,23 @@ Entware() {
  rm -f zapret-v71.1-openwrt-embedded.tar.gz
  mv zapret-v71.1 zapret
  
- #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
+ #Клонируем репозиторий и забираем папки lists и fake, файлы для keenetic entware, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
  cp -r zapret4rocket/lists /opt/zapret/
  cp -r zapret4rocket/fake /opt/zapret/files/
  cp -r zapret4rocket/extra_strats /opt/zapret/
+ cp -a zapret4rocket/Entware/zapret /opt/zapret/init.d/sysv/zapret
+ chmod +x /opt/zapret/init.d/sysv/zapret
+ echo "Права выданы /opt/zapret/init.d/sysv/zapret"
+ cp -a zapret4rocket/Entware/000-zapret.sh /opt/etc/ndm/netfilter.d/000-zapret.sh
+ chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
+ echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
+ cp -a zapret4rocket/Entware/S00fix /opt/etc/init.d/S00fix
+ chmod +x /opt/etc/init.d/S00fix
+ echo "Права выданы /opt/etc/init.d/S00fix"
  rm -rf zapret4rocket
+ cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
+ echo "10-keenetic-udp-fix скопирован"
  
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
@@ -672,7 +683,9 @@ Entware() {
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  sh -i zapret/install_easy.sh
- /etc/init.d/zapret restart
+ ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
+ echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
+ /opt/etc/init.d/S90-zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
 
