@@ -632,7 +632,7 @@ Entware() {
  #Удаление старого запрета, если есть
  if [ -f "zapret/uninstall_easy.sh" ]; then
      echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     sh echo Y | zapret/uninstall_easy.sh
+     echo Y | sh zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
      echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
@@ -661,11 +661,14 @@ Entware() {
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  mv config.default /opt/zapret/
+ sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
  # Запуск установочных скриптов
  sh zapret/install_bin.sh
  sh zapret/install_prereq.sh
- printf "\n\nY\n" | sh -i zapret/install_easy.sh
+ #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
+ sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' common/installer.sh
+ sh -i zapret/install_easy.sh
  /etc/init.d/zapret restart
  echo "zeefeer перезапущен и полностью установлен"
 }
