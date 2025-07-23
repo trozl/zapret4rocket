@@ -50,7 +50,7 @@ try_strategies() {
         /opt/zapret/init.d/sysv/zapret restart
         echo "Стратегия номер $i активирована"
 
-        read -p "Проверьте работоспособность и введите (\"Y\" - сохранить, Enter - далее): " answer
+        read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить, Enter - далее): " answer
         clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
         if [[ "$clean_answer" == "Y" ]]; then
             echo "Стратегия $i сохранена. Выходим."
@@ -329,7 +329,6 @@ if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
 elif [[ "$release" == "openwrt" ]]; then
     WRT
 elif [[ "$release" == "entware" ]]; then
-    echo "Заготовка"
     Entware
 else
     echo "Для этой ОС нет подходящей функции. Или ОС определение выполнено некорректно."
