@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+#New Script Warning
+bold_red='\033[1;31m'
+reset='\033[0m'
+echo -e "${bold_red}Это версия скрипта более не поддерживается, новая версия в репозитарии https://github.com/IndeecFOX/zapret4rocket
+Скрипт новой версии:
+curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
+Через 15 секунд выполнение скрипта будет продолжено${reset}"
+sleep 15
+
 #Запрос на установку 3x-ui или аналогов
 read -p "Install tunneling software?: (3xui, marzban, wg, 3proxy or Enter for none): " answer
 # Удаляем лишние символы и пробелы, приводим к верхнему регистру
