@@ -1,43 +1,39 @@
 **Установит запрет v71.1 и рабочие на данный момент стратегии.**  
 Всё что нужно - это ввести команду ниже и нажать Enter. Затем повторить нажатие Enter на любые запросы.
-Метод подключения к серверу выбираете самостоятельно.  
-Проверяется на на rocketcloud.ru ubuntu 22/24v, debian 12.  
+Метод подключения к серверу выбираете самостоятельно (В случае установки на VPS)  
+Проверяется на на rocketcloud.ru ubuntu 22/24v, debian 12, keenetic entware KN-3811  
   
-**Установка/обновление** zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) копируем и вставляем в ssh:  
-```
-bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install.sh)
-```
-Если у вас уже стоит zapret и вам нужно только обновление config файла:
-```
-curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
-```   
-**На все вопросы жмём Enter** (В самом начале скрипт спрашивает установить ли 3x-ui панель или аналоги (жмите Enter, если ничего не нужно или введите соответствущий текст)).   
-По окончании всех прожатий enter всё будет работать.   
-К серверу подключаетесь уже как хотите, WG/VLESS/OpenVPN и т.п. YouTube летает, есть доступы к ntc.party, meduza.io и прочему.  
-Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет). Инста должна только через приложение работать (бан ip в РФ)  
-  
-**Чат:** https://t.me/zee4r/
-
-Fork 07.02.25: простенький скрипт **для установки на OpenWRT**
-```
-opkg update && opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
-``` 
-Только обновление config файла:
-```
-curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /etc/init.d/zapret restart
-```
-**Beta с функционалом подбора стратегий для VPS/OWRT/Keenetic(Entware)**
+**Установка/обновление/подбор стратегий** zapret antiDPI под ключ на российских VPS (проверено на rocketcloud.ru) а так же на OpenWRT/Keenetic (Entware) копируем и вставляем в ssh:  
+**Версия с функционалом подбора стратегий для VPS/OWRT/Keenetic(Entware)**
 ``` 
 curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
 ```
+Если у вас уже стоит последний zeefeer и вам нужно только обновление config файла:
+```
+curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default -o /opt/zapret/config && /opt/zapret/init.d/sysv/zapret restart
+```   
+**На все вопросы жмём Enter** (В самом начале скрипт спрашивает установить ли 3x-ui панель или аналоги (жмите Enter, если ничего не нужно или введите соответствущий текст)).   
+По окончании всех прожатий enter всё будет работать.
+**Для активации функционала подбора стратегий запустите скрипт второй раз (если не работают текущие или проблемы с каким-то сайтом)**
+При установке на VPS: к серверу подключаетесь уже как хотите, WG/VLESS/OpenVPN и т.п. YouTube летает, есть доступы к ntc.party, meduza.io и прочему.  
+Дискорд (Discord) работает (при подключении через TUN для VLESS или протоколы с поддержкой UDP, иначе войса не будет). Инста должна только через приложение работать (бан ip в РФ)  
+  
+В случае **отсутствия/ошибки curl/wget/bash**:
 
-В случае отсутствия curl или bash: 
+Для keenetic entware/OWRT: opkg update && opkg install curl bash wget-ssl
 
-Для keenetic entware/OWRT: opkg update && opkg install curl bash 
+Для Ubuntu/Debian: apt update && apt install curl bash wget-ssl
 
-Для Ubuntu/Debian: apt update && apt install curl bash 
-
+**Чат:** https://t.me/zee4r/
 **ChangeLog:**
+
+Upd 23.07.25: Major update.
+- Кучка скриптов заменена на единый
+- Единый скрипт **теперь поддерживает Keenetic Entware**
+- Перевод на русский язык скрипта, шлифовка текста
+- Лёгкая шлифовка кода, убрано лишнее
+
+Upd 3-9.07.25: Различные багфиксы, правки.
 
 Upd 2.07.25: Добавлены комментарии к стратегиям в config файле. Ничего особого.
 Upd 26.06.25: Добавлено много стратегий для googlevideo.com. Для активации стереть около нужной "--skip". Стратегии для UPD(quick) и tcp.
