@@ -1,5 +1,12 @@
 #SSH Install command: opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
 
+#New Script Warning
+bold_red='\033[1;31m'
+reset='\033[0m'
+echo -e "${bold_red}Это версия скрипта более не поддерживается, новая версия в репозитарии https://github.com/IndeecFOX/zapret4rocket
+Скрипт новой версии:
+curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh${reset}"
+
 #Запрос на подбор стратегий 
 read -p "Find strategy? (zeefeer/zapret must be installed early) Write digital or press Enter: (1: YT (UDP QUIC), 2: YT (TCP), 3: RKN, 4: New domain, Enter for none): " answer
 clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]') # Удаляем лишние символы и пробелы, приводим к верхнему регистру
