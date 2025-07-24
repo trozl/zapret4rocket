@@ -20,11 +20,16 @@ curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_
   
 В случае **отсутствия/ошибки curl/wget/bash**:
 
-Для keenetic entware/OWRT: opkg update && opkg install curl bash wget-ssl
-
-Для Ubuntu/Debian: apt update && apt install curl bash wget-ssl
-
+Для keenetic entware/OWRT:
+```
+opkg update && opkg install curl bash wget-ssl
+```
+Для Ubuntu/Debian:
+```
+apt update && apt install curl bash wget-ssl
+```
 **Чат:** https://t.me/zee4r/
+
 **ChangeLog:**
 
 Upd 23.07.25: Major update.
