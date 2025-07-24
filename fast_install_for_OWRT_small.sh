@@ -1,5 +1,12 @@
 #SSH Instal command: opkg install bash curl && bash <(curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/fast_install_for_OWRT.sh)
 
+#New Script Warning
+bold_red='\033[1;31m'
+reset='\033[0m'
+echo -e "${bold_red}Это версия скрипта более не поддерживается, новая версия в репозитарии https://github.com/IndeecFOX/zapret4rocket
+Скрипт новой версии:
+curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh${reset}"
+
 #pre
 opkg update
 opkg install unzip
