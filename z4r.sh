@@ -29,6 +29,14 @@ else
 fi
 echo "OS: $release"
 
+zapret_download() {
+ # Распаковка архива zapret и его удаление
+ wget -O zapret-v71.2-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
+ tar -xzf zapret-v71.2-openwrt-embedded.tar.gz
+ rm -f zapret-v71.2-openwrt-embedded.tar.gz
+ mv zapret-v71.2 zapret
+}
+ 
 try_strategies() {
     local count="$1"
     local base_path="$2"
@@ -143,8 +151,8 @@ VPS() {
  #Запрос на подбор стратегий
  Strats_Tryer
 
- # Обновление пакетов и установка unzip
- apt update && apt install -y unzip && apt install -y git
+ # Обновление пакетов и установка git
+ apt update && apt install -y git
 
  # Переход в директорию /opt
  cd /opt
@@ -164,12 +172,9 @@ VPS() {
  else
      echo "Папка zapret не существует."
  fi
-
- # Распаковка архива zapret и его удаление
- wget https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1.zip
- unzip zapret-v71.1.zip
- rm -f zapret-v71.1.zip
- mv zapret-v71.1 zapret
+ 
+ #Скачивание запрет и распаковка
+ zapret_download
 
  #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
@@ -225,13 +230,8 @@ WRT() {
      echo "Папка zapret не существует."
  fi
  
- # Распаковка архива zapret и его удаление
- wget -O zapret-v71.1-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
- tar -xzf zapret-v71.1-openwrt-embedded.tar.gz
- rm -f zapret-v71.1-openwrt-embedded.tar.gz
- tar -xf zapret-v71.1-openwrt-embedded.tar
- rm -f zapret-v71.1-openwrt-embedded.tar
- mv zapret-v71.1 zapret
+ #Скачивание запрет и распаковка
+ zapret_download
  
  #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
@@ -283,11 +283,8 @@ Entware() {
      echo "Папка zapret не существует."
  fi
  
- # Распаковка архива zapret и его удаление
- wget -O zapret-v71.1-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
- tar -xzf zapret-v71.1-openwrt-embedded.tar.gz
- rm -f zapret-v71.1-openwrt-embedded.tar.gz
- mv zapret-v71.1 zapret
+ #Скачивание запрет и распаковка
+ zapret_download
  
  #Клонируем репозиторий и забираем папки lists и fake, файлы для keenetic entware, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
