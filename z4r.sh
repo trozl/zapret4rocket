@@ -194,11 +194,6 @@ WRT() {
  #Запрос на подбор стратегий
  Strats_Tryer
  
- #pre
- opkg update
- opkg install unzip
- opkg install git-http
- 
  #directories
  cd /
  if [ -d /opt ]; then
@@ -231,13 +226,20 @@ WRT() {
  rm -f zapret-v71.1-openwrt-embedded.tar.gz
  mv zapret-v71.1 zapret
  
- #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
- git clone https://github.com/IndeecFOX/zapret4rocket.git
- cp -r zapret4rocket/lists /opt/zapret/
- cp -r zapret4rocket/fake /opt/zapret/files/
- cp -r zapret4rocket/extra_strats /opt/zapret/
- rm -rf zapret4rocket
- 
+ read -p "Введите "S" если хотите пропустить установку git-http, клонирование репозитория и папок : " user_input
+ if [ "${user_input^^}" != "S" ]; then
+   echo "Выполняется установка git-http и копирование папок с репозитория"
+   opkg update
+   opkg install git-http
+   git clone https://github.com/IndeecFOX/zapret4rocket.git
+   cp -r zapret4rocket/lists /opt/zapret/
+   cp -r zapret4rocket/fake /opt/zapret/files/
+   cp -r zapret4rocket/extra_strats /opt/zapret/
+   rm -rf zapret4rocket
+ else
+   echo "Skip установки git-http, клонирования репозитория и дёргания из него файлов."
+ fi
+
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  mv config.default /opt/zapret/
