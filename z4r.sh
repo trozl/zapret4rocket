@@ -168,12 +168,25 @@ VPS() {
      echo "Папка zapret не существует."
  fi
 
- # Спрашиваем у юзера хочет ли другую версию zapret
- read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
- # Очистка от мусорных и непечатаемых символов
- USER_VER=$(echo "$USER_VER" | tr -cd '[:print:]' | sed 's/[^0-9.]*//g')
- # Если пусто - используем значение по умолчанию
- VER="${USER_VER:-$DEFAULT_VER}"
+ #Запрос желаемой версии zapret
+  while true; do
+    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    # Если пустой ввод — берем значение по умолчанию
+    if [ -z "$USER_VER" ]; then
+        VER="$DEFAULT_VER"
+        break
+    fi
+    # Проверяем длину не более 4 символов
+    LEN=${#USER_VER}
+    if [ "$LEN" -le 4 ]; then
+        VER="$USER_VER"
+        break
+    else
+        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
+    fi
+ done
+ echo "Будет использоваться версия: $VER"
+ 
  # Распаковка архива zapret и его удаление
  wget https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER.zip
  unzip zapret-v$VER.zip
@@ -229,12 +242,25 @@ WRT() {
      echo "Папка zapret не существует."
  fi
 
- # Спрашиваем у юзера хочет ли другую версию zapret
- read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
- # Очистка от мусорных и непечатаемых символов
- USER_VER=$(echo "$USER_VER" | tr -cd '[:print:]' | sed 's/[^0-9.]*//g')
- # Если пусто - используем значение по умолчанию
- VER="${USER_VER:-$DEFAULT_VER}"
+#Запрос желаемой версии zapret
+  while true; do
+    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    # Если пустой ввод — берем значение по умолчанию
+    if [ -z "$USER_VER" ]; then
+        VER="$DEFAULT_VER"
+        break
+    fi
+    # Проверяем длину не более 4 символов
+    LEN=${#USER_VER}
+    if [ "$LEN" -le 4 ]; then
+        VER="$USER_VER"
+        break
+    else
+        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
+    fi
+ done
+ echo "Будет использоваться версия: $VER"
+ 
  # Распаковка архива zapret и его удаление
  wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
  tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
@@ -298,12 +324,25 @@ Entware() {
      echo "Папка zapret не существует."
  fi
 
- # Спрашиваем у юзера хочет ли другую версию zapret
- read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
- # Очистка от мусорных и непечатаемых символов
- USER_VER=$(echo "$USER_VER" | tr -cd '[:print:]' | sed 's/[^0-9.]*//g')
- # Если пусто - используем значение по умолчанию
- VER="${USER_VER:-$DEFAULT_VER}"
+#Запрос желаемой версии zapret
+  while true; do
+    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    # Если пустой ввод — берем значение по умолчанию
+    if [ -z "$USER_VER" ]; then
+        VER="$DEFAULT_VER"
+        break
+    fi
+    # Проверяем длину не более 4 символов
+    LEN=${#USER_VER}
+    if [ "$LEN" -le 4 ]; then
+        VER="$USER_VER"
+        break
+    else
+        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
+    fi
+ done
+ echo "Будет использоваться версия: $VER"
+ 
  # Распаковка архива zapret и его удаление
  wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
  tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
