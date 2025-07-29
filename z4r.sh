@@ -7,6 +7,9 @@
 
 set -e
 
+#Какую версию zapret использовать, если юзер не попросит другую
+DEFAULT_VER="71.2"
+
 #Чтобы удобнее красить
 red='\033[0;31m'
 green='\033[0;32m'
@@ -165,11 +168,15 @@ VPS() {
      echo "Папка zapret не существует."
  fi
 
+ # Спрашиваем у юзера хочет ли другую версию zapret
+ read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+ # Если пусто - используем значение по умолчанию
+ VER="${USER_VER:-$DEFAULT_VER}"
  # Распаковка архива zapret и его удаление
- wget https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1.zip
- unzip zapret-v71.1.zip
- rm -f zapret-v71.1.zip
- mv zapret-v71.1 zapret
+ wget https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER.zip
+ unzip zapret-v$VER.zip
+ rm -f zapret-v$VER.zip
+ mv zapret-v$VER zapret
 
  #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
@@ -219,12 +226,16 @@ WRT() {
  else
      echo "Папка zapret не существует."
  fi
- 
+
+ # Спрашиваем у юзера хочет ли другую версию zapret
+ read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+ # Если пусто - используем значение по умолчанию
+ VER="${USER_VER:-$DEFAULT_VER}"
  # Распаковка архива zapret и его удаление
- wget -O zapret-v71.1-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
- tar -xzf zapret-v71.1-openwrt-embedded.tar.gz
- rm -f zapret-v71.1-openwrt-embedded.tar.gz
- mv zapret-v71.1 zapret
+ wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
+ tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
+ rm -f zapret-v$VER-openwrt-embedded.tar.gz
+ mv zapret-v$VER zapret
  
  read -p "Введите "S" если хотите пропустить установку git-http, клонирование репозитория и папок : " user_input
  if [ "${user_input^^}" != "S" ]; then
@@ -282,12 +293,16 @@ Entware() {
  else
      echo "Папка zapret не существует."
  fi
- 
+
+ # Спрашиваем у юзера хочет ли другую версию zapret
+ read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+ # Если пусто - используем значение по умолчанию
+ VER="${USER_VER:-$DEFAULT_VER}"
  # Распаковка архива zapret и его удаление
- wget -O zapret-v71.1-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v71.1/zapret-v71.1-openwrt-embedded.tar.gz"
- tar -xzf zapret-v71.1-openwrt-embedded.tar.gz
- rm -f zapret-v71.1-openwrt-embedded.tar.gz
- mv zapret-v71.1 zapret
+ wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
+ tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
+ rm -f zapret-v$VER-openwrt-embedded.tar.gz
+ mv zapret-v$VER zapret
  
  #Клонируем репозиторий и забираем папки lists и fake, файлы для keenetic entware, удаляем репозиторий
  git clone https://github.com/IndeecFOX/zapret4rocket.git
