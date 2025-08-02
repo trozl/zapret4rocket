@@ -32,6 +32,7 @@ apt update && apt install curl bash wget-ssl
 **Чат:** https://t.me/zee4r/
 
 **ChangeLog:**
+Upd 2.08.25: zapret 71.2 >> 71.3
 
 Upd 29.07.25:
 - Теперь пользователя спрашивает какую версию zapret он хочет установить. Enter для стандартной (Вынесена в отдельную переменную в коде)
