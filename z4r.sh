@@ -7,8 +7,8 @@
 
 set -e
 
-#Какую версию zapret использовать, если юзер не попросит другую
-DEFAULT_VER="71.3"
+#ОТКЛЮЧЕНО Какую версию zapret использовать, если юзер не попросит другую
+#DEFAULT_VER="71.3"
 
 #Чтобы удобнее красить
 red='\033[0;31m'
@@ -170,10 +170,11 @@ VPS() {
 
  #Запрос желаемой версии zapret
   while true; do
-    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
     # Если пустой ввод — берем значение по умолчанию
     if [ -z "$USER_VER" ]; then
-        VER="$DEFAULT_VER"
+        #VER="$DEFAULT_VER"
+        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         break
     fi
     # Проверяем длину не более 4 символов
@@ -244,10 +245,11 @@ WRT() {
 
 #Запрос желаемой версии zapret
   while true; do
-    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
     # Если пустой ввод — берем значение по умолчанию
     if [ -z "$USER_VER" ]; then
-        VER="$DEFAULT_VER"
+        #VER="$DEFAULT_VER"
+        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         break
     fi
     # Проверяем длину не более 4 символов
@@ -326,10 +328,11 @@ Entware() {
 
 #Запрос желаемой версии zapret
   while true; do
-    read -p "Введите желаемую версию zapret (Enter для $DEFAULT_VER): " USER_VER
+    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
     # Если пустой ввод — берем значение по умолчанию
     if [ -z "$USER_VER" ]; then
-        VER="$DEFAULT_VER"
+        #VER="$DEFAULT_VER"
+        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         break
     fi
     # Проверяем длину не более 4 символов
