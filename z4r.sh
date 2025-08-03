@@ -386,7 +386,7 @@ Entware() {
 #Запуск скрипта под нужную версию
 if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
     VPS
-elif [[ "$release" == "openwrt" ]]; then
+elif [[ "$release" == "openwrt" || "$release" == "immortalwrt" || "$release" == "asuswrt" ]]; then
     WRT
 elif [[ "$release" == "entware" ]]; then
     Entware
