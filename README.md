@@ -32,6 +32,8 @@ apt update && apt install curl bash wget-ssl
 **Чат:** https://t.me/zee4r/
 
 **ChangeLog:**
+Upd: 3.08.25: Добавлено определение immortalwrt и asuswrt.
+
 Upd 2.08.25: zapret 71.2 >> 71.3
 
 Upd 29.07.25:
