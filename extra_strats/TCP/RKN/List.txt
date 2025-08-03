@@ -1,5 +1,13 @@
-cloudflare-ech.com
+discord.com
+discord.gg
+discordapp.com
+discordapp.io
+discordapp.net
+discord.media
+discordcdn.com
+discordstatus.com
 discord-attachments-uploads-prd.storage.googleapis.com
+cloudflare-ech.com
 cdn.betterttv.net
 cdn.frankerfacez.com
 detectportal.firefox.com
