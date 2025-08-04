@@ -24,8 +24,8 @@ if [[ -f /etc/os-release ]]; then
 elif [[ -f /usr/lib/os-release ]]; then
     source /usr/lib/os-release
     release=$ID
-elif [[ -f /opt/etc/entware_release ]]; then
-    release=$(grep -i "^ID=" /opt/etc/entware_release | cut -d= -f2)
+elif [[ -f /etc/entware_release ]]; then
+    release="entware"
 else
     echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
     exit 1
