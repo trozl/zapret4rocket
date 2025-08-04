@@ -24,6 +24,8 @@ if [[ -f /etc/os-release ]]; then
 elif [[ -f /usr/lib/os-release ]]; then
     source /usr/lib/os-release
     release=$ID
+elif [[ -f /opt/etc/entware_release ]]; then
+    release="entware"
 elif [[ -f /etc/entware_release ]]; then
     release="entware"
 else
