@@ -32,6 +32,8 @@ apt update && apt install curl bash wget-ssl
 **Чат:** https://t.me/zee4r/
 
 **ChangeLog:**
+Upd 5.08.25: Изменение способа определениея entware (Keenetic)
+
 Upd: 3.08.25:
 - Теперь будет ставиться последняя версия zapret, если юзер не укажет иную
 - Добавлено определение immortalwrt и asuswrt.
