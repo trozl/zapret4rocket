@@ -34,6 +34,18 @@ else
 fi
 echo "OS: $release"
 
+#Создаём папки и забираем файлы папок lists, fake, extra_strats
+get_repo() {
+ #Создаём папки и забираем файлы папок lists, fake, extra_strats
+ mkdir -p /opt/zapret/lists /opt/zapret/extra_strats/TCP/{RKN,User,YT,temp} /opt/zapret/extra_strats/UDP/YT
+ for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -q -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
+ for fakefile in http_fake_MS.bin quic_{1..7}.bin quic_initial_www_google_com.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin tls_clienthello_www_google_com.bin; do wget -q -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
+ wget -q -O /opt/zapret/extra_strats/UDP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/UDP/YT/List.txt
+ wget -q -O /opt/zapret/extra_strats/TCP/RKN/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/RKN/List.txt
+ wget -q -O /opt/zapret/extra_strats/TCP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/YT/List.txt
+ touch /opt/zapret/extra_strats/UDP/YT/{1..8}.txt /opt/zapret/extra_strats/TCP/RKN/{1..17}.txt /opt/zapret/extra_strats/TCP/User/{1..17}.txt /opt/zapret/extra_strats/TCP/YT/{1..17}.txt /opt/zapret/extra_strats/TCP/temp/{1..17}.txt
+}
+
 try_strategies() {
     local count="$1"
     local base_path="$2"
@@ -196,12 +208,8 @@ VPS() {
  rm -f zapret-v$VER.zip
  mv zapret-v$VER zapret
 
- #Клонируем репозиторий и забираем папки lists и fake, удаляем репозиторий
- git clone https://github.com/IndeecFOX/zapret4rocket.git
- cp -r zapret4rocket/lists /opt/zapret/
- cp -r zapret4rocket/fake /opt/zapret/files/
- cp -r zapret4rocket/extra_strats /opt/zapret/
- rm -rf zapret4rocket
+ #Создаём папки и забираем файлы папок lists, fake, extra_strats
+ get_repo
 
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
@@ -271,19 +279,8 @@ WRT() {
  rm -f zapret-v$VER-openwrt-embedded.tar.gz
  mv zapret-v$VER zapret
  
- read -p "Введите "S" если хотите пропустить установку git-http, клонирование репозитория и папок : " user_input
- if [ "${user_input^^}" != "S" ]; then
-   echo "Выполняется установка git-http и копирование папок с репозитория"
-   opkg update
-   opkg install git-http
-   git clone https://github.com/IndeecFOX/zapret4rocket.git
-   cp -r zapret4rocket/lists /opt/zapret/
-   cp -r zapret4rocket/fake /opt/zapret/files/
-   cp -r zapret4rocket/extra_strats /opt/zapret/
-   rm -rf zapret4rocket
- else
-   echo "Skip установки git-http, клонирования репозитория и дёргания из него файлов."
- fi
+ #Создаём папки и забираем файлы папок lists, fake, extra_strats
+ get_repo
 
  #Копирование нашего конфига на замену стандартному
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
@@ -300,7 +297,7 @@ Entware() {
  Strats_Tryer
  
  #preinstal env
- opkg install git-http coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
+ opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
  
  #directories
  cd /
@@ -354,12 +351,11 @@ Entware() {
  rm -f zapret-v$VER-openwrt-embedded.tar.gz
  mv zapret-v$VER zapret
  
- #Клонируем репозиторий и забираем папки lists и fake, файлы для keenetic entware, удаляем репозиторий
- git clone https://github.com/IndeecFOX/zapret4rocket.git
- cp -r zapret4rocket/lists /opt/zapret/
- cp -r zapret4rocket/fake /opt/zapret/files/
- cp -r zapret4rocket/extra_strats /opt/zapret/
- cp -a zapret4rocket/Entware/zapret /opt/zapret/init.d/sysv/zapret
+ #Создаём папки и забираем файлы папок lists, fake, extra_strats
+ get_repo
+
+ #Для Keenetic
+ wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
  chmod +x /opt/zapret/init.d/sysv/zapret
  echo "Права выданы /opt/zapret/init.d/sysv/zapret"
  cp -a zapret4rocket/Entware/000-zapret.sh /opt/etc/ndm/netfilter.d/000-zapret.sh
@@ -373,8 +369,7 @@ Entware() {
  echo "10-keenetic-udp-fix скопирован"
  
  #Копирование нашего конфига на замену стандартному
- wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
- mv config.default /opt/zapret/
+ wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  #Раскомменчивание юзера под keenetic
  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
