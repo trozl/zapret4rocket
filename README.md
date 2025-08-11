@@ -32,6 +32,8 @@ apt update && apt install curl bash wget-ssl
 **Чат:** https://t.me/zee4r/
 
 **ChangeLog:**
+Upd 11.08.25: git-http больше не скачивается. Используется wget. Это экономит 20Мб места для роутеров без внешней памяти. Но через wget скачивается на 30-60 секунд дольше.
+
 Upd 5.08.25: Изменение способа определениея entware (Keenetic)
 
 Upd: 3.08.25:
