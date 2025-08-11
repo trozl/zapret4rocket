@@ -36,7 +36,7 @@ echo "OS: $release"
 
 #Создаём папки и забираем файлы папок lists, fake, extra_strats
 get_repo() {
- #Создаём папки и забираем файлы папок lists, fake, extra_strats
+ echo "Ничего не зависло. Идёт скачивание в фоне файлов с репозитория github. 1-2 минуты."
  mkdir -p /opt/zapret/lists /opt/zapret/extra_strats/TCP/{RKN,User,YT,temp} /opt/zapret/extra_strats/UDP/YT
  for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -q -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
  for fakefile in http_fake_MS.bin quic_{1..7}.bin quic_initial_www_google_com.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin tls_clienthello_www_google_com.bin; do wget -q -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
