@@ -152,9 +152,7 @@ version_select() {
         read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
         # Если пустой ввод — берем значение по умолчанию
         if [ -z "$USER_VER" ]; then
-            VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest \
-                  | grep '"tag_name":' \
-                  | sed -E 's/.*"v\([^"]+\)".*/\1/')
+            VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
             break
         fi
         # Считаем длину
