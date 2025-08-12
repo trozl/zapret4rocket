@@ -148,24 +148,26 @@ remove_zapret() {
 
 #Запрос желаемой версии zapret
 version_select() {
- while true; do
-    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
-    # Если пустой ввод — берем значение по умолчанию
-    if [ -z "$USER_VER" ]; then
-        #VER="$DEFAULT_VER"
-        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        break
-    fi
-    # Проверяем длину не более 4 символов
-    if (( LEN > 4 )) || [[ "$USER_VER" == *%* ]]; then
-    if [ "$LEN" -le 4 ]; then
+    while true; do
+        read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
+        # Если пустой ввод — берем значение по умолчанию
+        if [ -z "$USER_VER" ]; then
+            VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest \
+                  | grep '"tag_name":' \
+                  | sed -E 's/.*"v\([^"]+\)".*/\1/')
+            break
+        fi
+        # Считаем длину
+        LEN=${#USER_VER}
+        # Проверка длины и знака %
+        if (( LEN > 4 )) || [[ "$USER_VER" == *%* ]]; then
+            echo "Некорректный ввод. Максимальная длина — 4 символа и без знака %. Попробуйте снова. (использование backspace может давать ошибку)"
+            continue
+        fi
         VER="$USER_VER"
         break
-    else
-        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
-    fi
- done
- echo "Будет использоваться версия: $VER"
+    done
+    echo "Будет использоваться версия: $VER"
 }
 
 VPS() {
