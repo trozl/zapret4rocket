@@ -211,8 +211,10 @@ VPS() {
  #Создаём папки и забираем файлы папок lists, fake, extra_strats
  get_repo
 
- #Копирование нашего конфига на замену стандартному
+ #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
  mv config.default /opt/zapret/
 
  # Запуск установочных скриптов
@@ -282,8 +284,10 @@ WRT() {
  #Создаём папки и забираем файлы папок lists, fake, extra_strats
  get_repo
 
- #Копирование нашего конфига на замену стандартному
+ #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
  wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
  mv config.default /opt/zapret/
  
  # Запуск установочных скриптов
@@ -368,8 +372,11 @@ Entware() {
  cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
  echo "10-keenetic-udp-fix скопирован"
  
- #Копирование нашего конфига на замену стандартному
- wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
+ wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
+
  #Раскомменчивание юзера под keenetic
  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  
