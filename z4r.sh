@@ -212,10 +212,9 @@ VPS() {
  get_repo
 
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
  wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
- mv config.default /opt/zapret/
 
  # Запуск установочных скриптов
  sh -i zapret/install_easy.sh
@@ -285,10 +284,9 @@ WRT() {
  get_repo
 
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
  wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
- mv config.default /opt/zapret/
  
  # Запуск установочных скриптов
  sh -i zapret/install_easy.sh
@@ -373,7 +371,7 @@ Entware() {
  echo "10-keenetic-udp-fix скопирован"
  
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
+ wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default
  wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
  wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
 
