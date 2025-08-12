@@ -128,6 +128,46 @@ Strats_Tryer() {
     esac
 }
 
+#Удаление старого запрета, если есть
+remove_zapret() {
+ if [ -f "zapret/uninstall_easy.sh" ]; then
+     echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
+     sh zapret/uninstall_easy.sh
+     echo "Скрипт uninstall_easy.sh выполнен."
+ else
+     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
+ fi
+ if [ -d "zapret" ]; then
+     echo "Удаляем папку zapret"
+     rm -rf zapret
+     echo "Папка zapret успешно удалена."
+ else
+     echo "Папка zapret не существует."
+ fi
+}
+
+#Запрос желаемой версии zapret
+version_select() {
+ while true; do
+    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
+    # Если пустой ввод — берем значение по умолчанию
+    if [ -z "$USER_VER" ]; then
+        #VER="$DEFAULT_VER"
+        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+        break
+    fi
+    # Проверяем длину не более 4 символов
+    if (( LEN > 4 )) || [[ "$USER_VER" == *%* ]]; then
+    if [ "$LEN" -le 4 ]; then
+        VER="$USER_VER"
+        break
+    else
+        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
+    fi
+ done
+ echo "Будет использоваться версия: $VER"
+}
+
 VPS() {
  #Запрос на установку 3x-ui или аналогов
  read -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy или Enter для пропуска): \033[0m' answer
@@ -167,40 +207,10 @@ VPS() {
  cd /opt
 
  #Удаление старого запрета, если есть
- if [ -f "zapret/uninstall_easy.sh" ]; then
-     echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     sh zapret/uninstall_easy.sh
-     echo "Скрипт uninstall_easy.sh выполнен."
- else
-     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
- fi
- if [ -d "zapret" ]; then
-     echo "Удаляем папку zapret"
-     rm -rf zapret
-     echo "Папка zapret успешно удалена."
- else
-     echo "Папка zapret не существует."
- fi
+ remove_zapret
 
  #Запрос желаемой версии zapret
-  while true; do
-    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
-    # Если пустой ввод — берем значение по умолчанию
-    if [ -z "$USER_VER" ]; then
-        #VER="$DEFAULT_VER"
-        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        break
-    fi
-    # Проверяем длину не более 4 символов
-    LEN=${#USER_VER}
-    if [ "$LEN" -le 4 ]; then
-        VER="$USER_VER"
-        break
-    else
-        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
-    fi
- done
- echo "Будет использоваться версия: $VER"
+ version_select
  
  # Распаковка архива zapret и его удаление
  wget https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER.zip
@@ -239,40 +249,10 @@ WRT() {
  cd /opt
  
  #Удаление старого запрета, если есть
- if [ -f "zapret/uninstall_easy.sh" ]; then
-     echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     sh zapret/uninstall_easy.sh
-     echo "Скрипт uninstall_easy.sh выполнен."
- else
-     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
- fi
- if [ -d "zapret" ]; then
-     echo "Удаляем папку zapret"
-     rm -rf zapret
-     echo "Папка zapret успешно удалена."
- else
-     echo "Папка zapret не существует."
- fi
+ remove_zapret
 
-#Запрос желаемой версии zapret
-  while true; do
-    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
-    # Если пустой ввод — берем значение по умолчанию
-    if [ -z "$USER_VER" ]; then
-        #VER="$DEFAULT_VER"
-        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        break
-    fi
-    # Проверяем длину не более 4 символов
-    LEN=${#USER_VER}
-    if [ "$LEN" -le 4 ]; then
-        VER="$USER_VER"
-        break
-    else
-        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
-    fi
- done
- echo "Будет использоваться версия: $VER"
+ #Запрос желаемой версии zapret
+ version_select
  
  # Распаковка архива zapret и его удаление
  wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
@@ -312,40 +292,10 @@ Entware() {
  cd /opt
  
  #Удаление старого запрета, если есть
- if [ -f "zapret/uninstall_easy.sh" ]; then
-     echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     echo Y | sh zapret/uninstall_easy.sh
-     echo "Скрипт uninstall_easy.sh выполнен."
- else
-     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
- fi
- if [ -d "zapret" ]; then
-     echo "Удаляем папку zapret"
-     rm -rf zapret
-     echo "Папка zapret успешно удалена."
- else
-     echo "Папка zapret не существует."
- fi
+ remove_zapret
 
-#Запрос желаемой версии zapret
-  while true; do
-    read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
-    # Если пустой ввод — берем значение по умолчанию
-    if [ -z "$USER_VER" ]; then
-        #VER="$DEFAULT_VER"
-        VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        break
-    fi
-    # Проверяем длину не более 4 символов
-    LEN=${#USER_VER}
-    if [ "$LEN" -le 4 ]; then
-        VER="$USER_VER"
-        break
-    else
-        echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова. (использование backspace может давать ошибку)"
-    fi
- done
- echo "Будет использоваться версия: $VER"
+ #Запрос желаемой версии zapret
+ version_select
  
  # Распаковка архива zapret и его удаление
  wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
