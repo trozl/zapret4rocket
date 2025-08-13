@@ -5,6 +5,7 @@ youtubekids.com
 ggpht.com
 ytimg.com
 gvt1.com
+googleusercontent.com
 ytimg.l.google.com
 jnn-pa.googleapis.com
 manifest.googlevideo.com
@@ -17,3 +18,4 @@ youtubei.googleapis.com
 yt-video-upload.l.google.com
 wide-youtube.l.google.com
 play.google.com
+
