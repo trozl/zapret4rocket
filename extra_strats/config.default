@@ -73,7 +73,7 @@ TPWS_OPT="
 NFQWS_ENABLE=1
 # redirect outgoing traffic with connbytes limiter applied in both directions.
 NFQWS_PORTS_TCP=80,443
-NFQWS_PORTS_UDP=443,50000-50099
+NFQWS_PORTS_UDP=443
 # PKT_OUT means connbytes dir original
 # PKT_IN means connbytes dir reply
 # this is --dpi-desync-cutoff=nX kernel mode implementation for linux. it saves a lot of CPU.
@@ -162,8 +162,8 @@ NFQWS_OPT="
 'Обход блокировок указанных в стратегии сайтов по httpS'
 --filter-tcp=443 --hostlist-domains=awsglobalaccelerator.com,cloudfront.net,amazon.com,amazonaws.com,awsstatic.com --dpi-desync=multisplit --dpi-desync-split-seqovl=211 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_5.bin --new
 'Обход блокировок войса в Discord ОТКЛЮЧЕНО. Обход скриптом bol-van'
---filter-l3=ipv6 --filter-udp=50000-50099 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl6 --dup=2 --dup-autottl6 --dup-cutoff=n3 --new
---filter-l3=ipv4 --filter-udp=50000-50099 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3 --new
+--skip --filter-l3=ipv6 --filter-udp=50000-50099 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl6 --dup=2 --dup-autottl6 --dup-cutoff=n3 --new
+--skip --filter-l3=ipv4 --filter-udp=50000-50099 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3 --new
 'Обход блокировок cloudflare. Обход по ip, по ipv6 и ipv4. Могут иногда вызывать проблемы различные. Можно закомменитровать skip ом или добавить нужные ip исключений в статегии после exclude ip'
 --filter-l3=ipv6 --filter-tcp=443 --ipset=/opt/zapret/lists/cloudflare-ipset_v6.txt --ipset-exclude-ip=2606:4700:4700::1111,2606:4700:4700::1001 --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
 --filter-l3=ipv4 --filter-tcp=443 --ipset=/opt/zapret/lists/cloudflare-ipset.txt --ipset-exclude-ip=1.1.1.1,1.0.0.1,212.109.195.93,83.220.169.155,141.105.71.21,18.244.96.0/19,18.244.128.0/19 --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
