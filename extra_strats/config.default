@@ -1,4 +1,4 @@
-# Zeefeer update strats 14.08.25. zeefeer v 13.08.25
+# Zeefeer update strats 17.08.25. zeefeer v 13.08.25
 #KDS and flowseal special thx 
 # this file is included from init scripts
 # change values here
@@ -93,7 +93,8 @@ NFQWS_UDP_PKT_IN=0
 
 # just notes: --debug=@debug.log /opt/zapret/lists/ /opt/zapret/files/fake/
 #GoogleVideo first UDP strats!!! UDP for Quick. You maybe need change only TCP or UDP or both strats. For enable starats just delete --skip
-NFQWS_OPT_DESYNC_DISCORD_MEDIA="--fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3"
+'Запасная стратегия DISCORD вместо просто fake
+#NFQWS_OPT_DESYNC_DISCORD_MEDIA="--dpi-desync=fake --dpi-desync-autottl --dup=2 --dup-autottl --dup-cutoff=n3"
 NFQWS_OPT="
 'Лист для исключения из фильтрации доменов по TCP. Можно просто на место example вписать нужные через запятую, можно в листы добавить'
 --filter-tcp=80,443 --hostlist-domains=example.com,test.com --hostlist=/opt/zapret/lists/netrogat.txt --new
