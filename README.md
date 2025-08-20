@@ -28,7 +28,7 @@ YouTube без ограничений, работа войсов Telegram, Whats
 ### ⚡ Быстрое обновление конфига
 Если zeefeer уже установлен и нужно только обновить конфигурационный файл (Работа не гарантируется **Не работает на keenetic**):
 ```bash
-curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/config.default -o /opt/zapret/config && /opt/zapret/init.d/sysv/zapret restart
+curl -Ls https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default -o /opt/zapret/config && /opt/zapret/init.d/sysv/zapret restart
 ```
 
 <a id="требования-и-зависимости"></a>
