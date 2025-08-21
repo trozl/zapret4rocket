@@ -1,4 +1,5 @@
 pinterest.com
+netflix.com
 nnmclub.to
 nnmstatic.win
 vsetop.org
@@ -17,3 +18,4 @@ vkvideo.ru
 okcdn.ru
 api.mycdn.me
 rutube.ru
+
