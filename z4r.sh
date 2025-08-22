@@ -283,7 +283,7 @@ fi
 Strats_Tryer
  
 #keenetic preinstal env
-if [[ "$OSystem" == "VPS" ]]; then
+if [[ "$OSystem" == "Entware" ]]; then
  opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
 fi
 
