@@ -7,9 +7,6 @@
 
 set -e
 
-#ОТКЛЮЧЕНО Какую версию zapret использовать, если юзер не попросит другую
-#DEFAULT_VER="71.3"
-
 #Чтобы удобнее красить
 red='\033[0;31m'
 green='\033[0;32m'
@@ -17,26 +14,22 @@ blue='\033[0;34m'
 yellow='\033[0;33m'
 plain='\033[0m'
 
-#Проверка ОС
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    release=$ID
-elif [[ -f /usr/lib/os-release ]]; then
-    source /usr/lib/os-release
-    release=$ID
-elif [[ -f /opt/etc/entware_release ]]; then
-    release="entware"
-elif [[ -f /etc/entware_release ]]; then
-    release="entware"
-else
-    echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
-    exit 1
-fi
-echo "OS: $release"
+#___Сначала идут анонсы функций____
 
-#Создаём папки и забираем файлы папок lists, fake, extra_strats
+#Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
+dir_select(){
+ cd /
+ if [ -d /opt ]; then
+     echo "Каталог /opt уже существует"
+ else
+     echo "Создаём каталог /opt"
+     mkdir /opt
+ fi
+ cd /opt
+}
+
+#Создаём папки и забираем файлы папок lists, fake, extra_strats, копируем конфиг, скрипты для войсов DS, WA, TG
 get_repo() {
- #echo "Ничего не зависло. Идёт скачивание в фоне файлов с репозитория github. 1-2 минуты."
  mkdir -p /opt/zapret/lists /opt/zapret/extra_strats/TCP/{RKN,User,YT,temp} /opt/zapret/extra_strats/UDP/YT
  for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
  for fakefile in http_fake_MS.bin quic_{1..7}.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin; do wget -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
@@ -44,8 +37,13 @@ get_repo() {
  wget -O /opt/zapret/extra_strats/TCP/RKN/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/RKN/List.txt
  wget -O /opt/zapret/extra_strats/TCP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/YT/List.txt
  touch /opt/zapret/extra_strats/UDP/YT/{1..8}.txt /opt/zapret/extra_strats/TCP/RKN/{1..17}.txt /opt/zapret/extra_strats/TCP/User/{1..17}.txt /opt/zapret/extra_strats/TCP/YT/{1..17}.txt /opt/zapret/extra_strats/TCP/temp/{1..17}.txt
+ #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
+ wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+ wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
 }
 
+#Функция для функции подбора стратегий
 try_strategies() {
     local count="$1"
     local base_path="$2"
@@ -81,6 +79,7 @@ try_strategies() {
     exit 0
 }
 
+#Сама функция подбора стратегий
 Strats_Tryer() {
     if [ ! -f "/opt/zapret/uninstall_easy.sh" ]; then
         echo "zapret не установлен, пропускаем скрипт подбора профиля"
@@ -140,16 +139,20 @@ remove_zapret() {
  if [ -d "zapret" ]; then
      echo "Удаляем папку zapret"
      rm -rf zapret
-     echo "Папка zapret успешно удалена."
  else
      echo "Папка zapret не существует."
  fi
 }
 
-#Запрос желаемой версии zapret
+#Запрос желаемой версии zapret или выход из скрипта для удаления
 version_select() {
     while true; do
-        read -p "Введите желаемую версию zapret (Enter для новейшей): " USER_VER
+		read -p $'\033[0;32mВведите желаемую версию zapret или "0" для отмены установки (Enter для новейшей версии): \033[0m' USER_VER
+		# Если пользователь ввёл 0 оставляем zapret удалённым и выходим
+        if [[ "$USER_VER" == "0" ]]; then
+         echo "Zapret был удалён. Выходим из скрипта."
+         exit 0
+        fi
         # Если пустой ввод — берем значение по умолчанию
         if [ -z "$USER_VER" ]; then
             VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
@@ -168,8 +171,50 @@ version_select() {
     echo "Будет использоваться версия: $VER"
 }
 
-VPS() {
- #Запрос на установку 3x-ui или аналогов
+#Скачивание, распаковка архива zapret и его удаление
+zapret_get() {
+ if [[ "$OSystem" == "VPS" ]]; then
+     tarfile="zapret-v$VER.tar.gz"
+ else
+     tarfile="zapret-v$VER-openwrt-embedded.tar.gz"
+ fi
+ wget -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
+ tar -xzf "$tarfile"
+ rm -f "$tarfile"
+ mv "zapret-v$VER" zapret
+}
+
+#Запуск установочных скриптов и перезагрузка
+install_zapret_reboot() {
+ sh -i zapret/install_easy.sh
+ /opt/zapret/init.d/sysv/zapret restart
+ echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
+}
+
+#Для Keenetic
+keenetic_fixes() {
+ wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
+ chmod +x /opt/zapret/init.d/sysv/zapret
+ echo "Права выданы /opt/zapret/init.d/sysv/zapret"
+ wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
+ chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
+ echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
+ wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
+ chmod +x /opt/etc/init.d/S00fix
+ echo "Права выданы /opt/etc/init.d/S00fix"
+ rm -rf zapret4rocket
+ cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
+ echo "10-keenetic-udp-fix скопирован"
+ #Раскомменчивание юзера под keenetic
+ sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+ #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
+ sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
+ ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
+ echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
+}
+
+#Запрос на установку 3x-ui или аналогов
+get_panel() {
  read -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy или Enter для пропуска): \033[0m' answer
  # Удаляем лишние символы и пробелы, приводим к верхнему регистру
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
@@ -196,155 +241,69 @@ VPS() {
  else
      echo "Пропуск установки ПО туннелирования."
  fi
-
- #Запрос на подбор стратегий
- Strats_Tryer
-
- # Обновление пакетов и установка unzip
- apt update && apt install -y unzip && apt install -y git
-
- # Переход в директорию /opt
- cd /opt
-
- #Удаление старого запрета, если есть
- remove_zapret
-
- #Запрос желаемой версии zapret
- version_select
- 
- # Распаковка архива zapret и его удаление
- wget https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER.zip
- unzip zapret-v$VER.zip
- rm -f zapret-v$VER.zip
- mv zapret-v$VER zapret
-
- #Создаём папки и забираем файлы папок lists, fake, extra_strats
- get_repo
-
- #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
- wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
- wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
-
- # Запуск установочных скриптов
- sh -i zapret/install_easy.sh
-
- # Перезагрузка zapret с помощью systemd
- /opt/zapret/init.d/sysv/zapret restart
- echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
 
-WRT() {
- #Запрос на подбор стратегий
- Strats_Tryer
- 
- #directories
- cd /
- if [ -d /opt ]; then
-     echo "Каталог /opt уже существует"
- else
-     echo "Создаём каталог /opt"
-     mkdir /opt
- fi
- cd /opt
- 
- #Удаление старого запрета, если есть
- remove_zapret
+#___Сам код начинается тут____
 
- #Запрос желаемой версии zapret
- version_select
- 
- # Распаковка архива zapret и его удаление
- wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
- tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
- rm -f zapret-v$VER-openwrt-embedded.tar.gz
- mv zapret-v$VER zapret
- 
- #Создаём папки и забираем файлы папок lists, fake, extra_strats
- get_repo
-
- #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
- wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
- wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
- 
- # Запуск установочных скриптов
- sh -i zapret/install_easy.sh
- /opt/zapret/init.d/sysv/zapret restart
- echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
-}
-
-Entware() {
- #Запрос на подбор стратегий
- Strats_Tryer
- 
- #preinstal env
- opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
- 
- #directories
- cd /
- if [ -d /opt ]; then
-     echo "Каталог /opt уже существует"
- else
-     echo "Создаём каталог /opt"
-     mkdir /opt
- fi
- cd /opt
- 
- #Удаление старого запрета, если есть
- remove_zapret
-
- #Запрос желаемой версии zapret
- version_select
- 
- # Распаковка архива zapret и его удаление
- wget -O zapret-v$VER-openwrt-embedded.tar.gz "https://github.com/bol-van/zapret/releases/download/v$VER/zapret-v$VER-openwrt-embedded.tar.gz"
- tar -xzf zapret-v$VER-openwrt-embedded.tar.gz
- rm -f zapret-v$VER-openwrt-embedded.tar.gz
- mv zapret-v$VER zapret
- 
- #Создаём папки и забираем файлы папок lists, fake, extra_strats
- get_repo
-
- #Для Keenetic
- wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
- chmod +x /opt/zapret/init.d/sysv/zapret
- echo "Права выданы /opt/zapret/init.d/sysv/zapret"
- wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
- chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
- echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
- wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
- chmod +x /opt/etc/init.d/S00fix
- echo "Права выданы /opt/etc/init.d/S00fix"
- rm -rf zapret4rocket
- cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
- echo "10-keenetic-udp-fix скопирован"
- 
- #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
- wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
- wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
-
- #Раскомменчивание юзера под keenetic
- sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
- 
- # Запуск установочных скриптов
- #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
- sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
- sh -i zapret/install_easy.sh
- ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
- echo "Добавлено в автозагрузку: /opt/etc/init.d/S90-zapret > /opt/zapret/init.d/sysv/zapret"
- /opt/zapret/init.d/sysv/zapret restart
- echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
-}
+#Проверка ОС
+if [[ -f /etc/os-release ]]; then
+    source /etc/os-release
+    release=$ID
+elif [[ -f /usr/lib/os-release ]]; then
+    source /usr/lib/os-release
+    release=$ID
+elif [[ -f /opt/etc/entware_release ]]; then
+    release="entware"
+elif [[ -f /etc/entware_release ]]; then
+    release="entware"
+else
+    echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
+    exit 1
+fi
+echo "OS: $release"
 
 #Запуск скрипта под нужную версию
 if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
-    VPS
+	OSystem="VPS"
 elif [[ "$release" == "openwrt" || "$release" == "immortalwrt" || "$release" == "asuswrt" ]]; then
-    WRT
+	OSystem="WRT"
 elif [[ "$release" == "entware" ]]; then
-    Entware
+	OSystem="Entware"
 else
     echo "Для этой ОС нет подходящей функции. Или ОС определение выполнено некорректно."
 fi
+
+#Выполнение общего для всех ОС кода с ответвлениями под ОС
+#Запрос на установку 3x-ui или аналогов для VPS
+if [[ "$OSystem" == "VPS" ]]; then
+ get_panel     
+fi
+
+#Запрос на подбор стратегий
+Strats_Tryer
+ 
+#keenetic preinstal env
+if [[ "$OSystem" == "VPS" ]]; then
+ opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
+fi
+
+#Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
+dir_select
+
+#Удаление старого запрета, если есть
+remove_zapret
+
+#Запрос желаемой версии zapret
+version_select
+ 
+#Скачивание, распаковка архива zapret и его удаление
+zapret_get
+
+#Создаём папки и забираем файлы папок lists, fake, extra_strats, копируем конфиг, скрипты для войсов DS, WA, TG
+get_repo
+
+#Для Keenetic
+keenetic_fixes
+
+#Запуск установочных скриптов и перезагрузка
+install_zapret_reboot
