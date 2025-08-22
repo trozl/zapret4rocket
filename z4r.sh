@@ -303,7 +303,9 @@ zapret_get
 get_repo
 
 #Для Keenetic
-keenetic_fixes
+if [[ "$OSystem" == "Entware" ]]; then
+ keenetic_fixes
+fi
 
 #Запуск установочных скриптов и перезагрузка
 install_zapret_reboot
