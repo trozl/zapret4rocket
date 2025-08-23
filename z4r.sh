@@ -131,16 +131,16 @@ Strats_Tryer() {
 
 #Удаление старого запрета, если есть
 remove_zapret() {
- if [ -f "zapret/uninstall_easy.sh" ]; then
+ if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
      echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
-     sh zapret/uninstall_easy.sh
+     sh /opt/zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
      echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
  fi
- if [ -d "zapret" ]; then
+ if [ -d "/opt/zapret" ]; then
      echo "Удаляем папку zapret"
-     rm -rf zapret
+     rm -rf /opt/zapret
  else
      echo "Папка zapret не существует."
  fi
@@ -187,12 +187,12 @@ zapret_get() {
  wget -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
  tar -xzf "$tarfile"
  rm -f "$tarfile"
- mv "zapret-v$VER" zapret
+ mv "zapret-v$VER" /opt/zapret
 }
 
 #Запуск установочных скриптов и перезагрузка
 install_zapret_reboot() {
- sh -i zapret/install_easy.sh
+ sh -i /opt/zapret/install_easy.sh
  /opt/zapret/init.d/sysv/zapret restart
  echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
