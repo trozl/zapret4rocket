@@ -149,21 +149,42 @@ remove_zapret() {
 #Запрос желаемой версии zapret или выход из скрипта для удаления
 version_select() {
     while true; do
-		read -p $'\033[0;32mВведите желаемую версию zapret или "0" для отмены установки (Enter для новейшей версии): \033[0m' USER_VER
-		# Если пользователь ввёл 0 оставляем zapret удалённым и выходим
-        if [[ "$USER_VER" == "0" ]]; then
-         echo "Zapret был удалён. Выходим из скрипта."
-         exit 0
-        fi
+		read -p $'\033[0;32mВведите желаемую версию zapret (Enter для новейшей версии): \033[0m' USER_VER
         # Если пустой ввод — берем значение по умолчанию
-        if [ -z "$USER_VER" ]; then
-            VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-			if [ ${#VER} -lt 2 ]; then
-             echo -e "${yellow}Не удалось получить информацию о последней версии с github. Будет использоваться версия $DEFAULT_VER.${plain}"
-             VER="$DEFAULT_VER"
-            fi
-            break
-        fi
+		if [ -z "$USER_VER" ]; then
+    	 if [ -z "$USER_VER" ]; then
+    	 VER1=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    	 VER2=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4 | sed 's/^v//')
+    	 VER3=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -r 's/.*"v([^"]+)".*/\1/')
+    	 VER4=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | awk -F'"' '{print $4}' | sed 's/^v//')
+		 fi
+	     # проверяем результаты по порядку
+    	 if [ ${#VER1} -ge 2 ]; then
+       	  VER="$VER1"
+       	  METHOD="sed -E"
+    	 elif [ ${#VER2} -ge 2 ]; then
+       	  VER="$VER2"
+       	  METHOD="grep+cut"
+    	 elif [ ${#VER3} -ge 2 ]; then
+          VER="$VER3"
+          METHOD="sed -r"
+    	 elif [ ${#VER4} -ge 2 ]; then
+       	  VER="$VER4"
+       	  METHOD="awk"
+    	 else
+          echo -e "${yellow}Не удалось получить информацию о последней версии с GitHub. Будет использоваться версия $DEFAULT_VER.${plain}"
+          VER="$DEFAULT_VER"
+          METHOD="default"
+    	 fi
+	     # краткий отчёт
+    	 echo -e "${yellow}Проверка версий:${plain}"
+    	 echo "  sed -E   : $VER1"
+    	 echo "  grep+cut : $VER2"
+    	 echo "  sed -r   : $VER3"
+    	 echo "  awk      : $VER4"
+    	 echo -e "${green}Выбрано: $VER (метод: $METHOD)${plain}"
+    	 break
+		fi
         # Считаем длину
         LEN=${#USER_VER}
         # Проверка длины и знака %
@@ -254,7 +275,7 @@ get_menu() {
         echo "zapret не установлен, пропускаем скрипт меню"
         return
  fi
- read -p $'\033[33mВыберите необходимое действие? (1-6 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
+ read -p $'\033[33mВыберите необходимое действие? (1-7 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  case "$clean_answer" in
   "1")
@@ -302,6 +323,10 @@ get_menu() {
    exit 0
    ;;
   "7")
+   nano /opt/zapret/config
+   exit 0
+   ;;
+  "8")
    echo -e "${green}Специальный zeefeer premium для Valery ProD активирован. Наверное.${plain}"
    exit 0
    ;;
