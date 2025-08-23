@@ -6,6 +6,8 @@
 #Для Ubuntu/Debian: apt update && apt install curl bash
 
 set -e
+#Для Valery ProD. Переменная содержащая версию на случай невозможности получить информацию о lastest с github
+DEFAULT_VER="71.4"
 
 #Чтобы удобнее красить
 red='\033[0;31m'
@@ -156,6 +158,10 @@ version_select() {
         # Если пустой ввод — берем значение по умолчанию
         if [ -z "$USER_VER" ]; then
             VER=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+			if [ ${#VER} -lt 2 ]; then
+             echo -e "${yellow}Не удалось получить информацию о последней версии с github. Будет использоваться версия $DEFAULT_VER.${plain}"
+             VER="$DEFAULT_VER"
+            fi
             break
         fi
         # Считаем длину
