@@ -65,7 +65,7 @@ try_strategies() {
         /opt/zapret/init.d/sysv/zapret restart
         echo "Стратегия номер $i активирована"
 
-        read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить, Enter - далее): " answer
+        read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить и выйти, Enter - далее): " answer
         clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
         if [[ "$clean_answer" == "Y" ]]; then
             echo "Стратегия $i сохранена. Выходим."
@@ -202,7 +202,6 @@ keenetic_fixes() {
  wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
  chmod +x /opt/etc/init.d/S00fix
  echo "Права выданы /opt/etc/init.d/S00fix"
- rm -rf zapret4rocket
  cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
  echo "10-keenetic-udp-fix скопирован"
  #Раскомменчивание юзера под keenetic
@@ -243,6 +242,66 @@ get_panel() {
  fi
 }
 
+#Меню
+get_menu() {
+ if [ ! -f "/opt/zapret/uninstall_easy.sh" ]; then
+        echo "zapret не установлен, пропускаем скрипт меню"
+        return
+ fi
+ read -p $'\033[33mВыберите необходимое действие? (1-6 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
+ clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+ case "$clean_answer" in
+  "1")
+   echo "Режим подбора других стратегий"
+   Strats_Tryer
+   ;;
+  "2")
+   /opt/zapret/init.d/sysv/zapret stop
+   echo "zapret остановлен"
+   exit 0
+   ;;
+  "3")
+   /opt/zapret/init.d/sysv/zapret restart
+   echo "zapret пере(запущен)"
+   exit 0
+   ;;
+  "4")
+   remove_zapret
+   echo "zapret удалён"
+   exit 0
+   ;;
+  "5")
+   /opt/zapret/init.d/sysv/zapret stop
+   rm -rf /opt/zapret/lists /opt/zapret/extra_strats
+   rm -f /opt/zapret/files/fake/http_fake_MS.bin /opt/zapret/files/fake/quic_{1..7}.bin /opt/zapret/files/fake/syn_packet.bin /opt/zapret/files/fake/tls_clienthello_{1..18}.bin /opt/zapret/files/fake/tls_clienthello_2n.bin /opt/zapret/files/fake/tls_clienthello_6a.bin
+   get_repo
+   #Раскомменчивание юзера под keenetic
+   if [[ "$OSystem" == "Entware" ]]; then
+    sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+   fi
+   /opt/zapret/init.d/sysv/zapret start
+   echo -e "${green}Config файл обновлён. Листы подбора стратегий и исключений сброшены в дефолт. Фейк файлы обновлены.${plain}"
+   exit 0
+   ;;
+  "6")
+   read -p "Введите домен, который добавить в исключения (например, mydomain.com): " user_domain
+   user_domain=$(echo "$user_domain" | tr -d '[:space:]')
+   if [ -n "$user_domain" ]; then
+    echo "$user_domain" >> /opt/zapret/lists/netrogat.txt
+	/opt/zapret/init.d/sysv/zapret restart
+    echo -e "Домен ${yellow}$user_domain${plain} добавлен в исключения (netrogat.txt). zapret перезапущен. ${yellow}Если в домене присутствуют некорректные символы - значит случился баг при вводе (сначала писали на русском языке). Передобавьте.${plain}"
+   else
+    echo "Ввод пустой, ничего не добавлено"
+   fi
+   exit 0
+   ;;
+  "7")
+   echo -e "${green}Специальный zeefeer premium для Valery ProD активирован. Наверное.${plain}"
+   exit 0
+   ;;
+  esac
+ }
+
 #___Сам код начинается тут____
 
 #Проверка ОС
@@ -279,8 +338,8 @@ if [[ "$OSystem" == "VPS" ]]; then
  get_panel     
 fi
 
-#Запрос на подбор стратегий
-Strats_Tryer
+#Меню
+get_menu
  
 #keenetic preinstal env
 if [[ "$OSystem" == "Entware" ]]; then
