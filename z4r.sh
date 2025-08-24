@@ -275,7 +275,7 @@ get_menu() {
         echo "zapret не установлен, пропускаем скрипт меню"
         return
  fi
- read -p $'\033[33mВыберите необходимое действие? (1-7 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
+ read -p $'\033[33mВыберите необходимое действие? (1-8 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  case "$clean_answer" in
   "1")
@@ -327,6 +327,12 @@ get_menu() {
    exit 0
    ;;
   "8")
+   echo -e "${green}Выделены порты 50000-50099 и расскоменитированы стратегии DS в строках 168 и 169 конфига.${plain}"
+   sed -i 's/^NFQWS_PORTS_UDP=443$/NFQWS_PORTS_UDP=443,50000-50099/' /opt/zapret/config.default
+   sed -i '168,169s/--skip //' /opt/zapret/config.default
+   exit 0
+   ;;
+  "9")
    echo -e "${green}Специальный zeefeer premium для Valery ProD активирован. Наверное.${plain}"
    exit 0
    ;;
