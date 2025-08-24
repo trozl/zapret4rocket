@@ -133,6 +133,7 @@ Strats_Tryer() {
 remove_zapret() {
  if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
      echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
+	 /opt/zapret/init.d/sysv/zapret stop
      sh /opt/zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
