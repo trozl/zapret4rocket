@@ -328,8 +328,8 @@ get_menu() {
    ;;
   "8")
    echo -e "${green}Выделены порты 50000-50099 и расскоменитированы стратегии DS в строках 168 и 169 конфига.${plain}"
-   sed -i 's/^NFQWS_PORTS_UDP=443$/NFQWS_PORTS_UDP=443,50000-50099/' /opt/zapret/config.default
-   sed -i '168,169s/--skip //' /opt/zapret/config.default
+   sed -i 's/^NFQWS_PORTS_UDP=443$/NFQWS_PORTS_UDP=443,50000-50099/' /opt/zapret/config
+   sed -i '168,169s/--skip //' /opt/zapret/config
    exit 0
    ;;
   "9")
