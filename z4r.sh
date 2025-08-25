@@ -285,17 +285,17 @@ get_menu() {
    ;;
   "2")
    /opt/zapret/init.d/sysv/zapret stop
-   echo "zapret остановлен"
+   echo -e "${green}zapret остановлен${plain}"
    exit 0
    ;;
   "3")
    /opt/zapret/init.d/sysv/zapret restart
-   echo "zapret пере(запущен)"
+   echo -e "${green}zapret пере(запущен)${plain}"
    exit 0
    ;;
   "4")
    remove_zapret
-   echo "zapret удалён"
+   echo -e "${yellow}zapret удалён${plain}"
    exit 0
    ;;
   "5")
