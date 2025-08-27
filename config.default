@@ -154,10 +154,10 @@ NFQWS_OPT="
 --filter-udp=443 --hostlist=/opt/zapret/lists/russia-youtubeQ.txt --dpi-desync=fake,udplen --dpi-desync-udplen-increment=8 --dpi-desync-udplen-pattern=0x0F0F0E0F --dpi-desync-fake-quic=/opt/zapret/files/fake/quic_6.bin --dpi-desync-cutoff=n3 --dpi-desync-repeats=2 --new
 'Стратегия для YouTube по TCP протоколу без домена GV'
 --filter-tcp=443 --hostlist=/opt/zapret/lists/russia-youtube.txt --dpi-desync=multisplit --dpi-desync-split-seqovl=1 --dpi-desync-split-pos=sld+1 --new
-'Обход блокировки анонсеров rutracker.org'
---filter-tcp=80 --hostlist-domains=t-ru.org --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=host+1 --dpi-desync-fake-http=0x0E0E0F0E --dpi-desync-fooling=md5sig --new
-'Обход блокировок различных сайтов по http'
---filter-tcp=80 --hostlist=/opt/zapret/lists/mycdnlist.txt --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=sld+1 --dpi-desync-fake-http=/opt/zapret/files/fake/http_fake_MS.bin --dpi-desync-fooling=md5sig --dup=2 --dup-fooling=md5sig --dup-cutoff=n3 --new
+'Обход блокировки анонсеров rutracker.org и различных сайтов по HTTP'
+--filter-tcp=80 --hostlist-domains=t-ru.org --hostlist=/opt/zapret/lists/mycdnlist.txt --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=host+1 --dpi-desync-fake-http=0x0E0E0F0E --dpi-desync-fooling=md5sig --new
+'Обход блокировок различных сайтов по http (Отключено, используется страта выше)'
+--skip --filter-tcp=80 --hostlist=/opt/zapret/lists/mycdnlist.txt --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --dpi-desync=fake,multisplit --dpi-desync-split-seqovl=2 --dpi-desync-split-pos=sld+1 --dpi-desync-fake-http=/opt/zapret/files/fake/http_fake_MS.bin --dpi-desync-fooling=md5sig --dup=2 --dup-fooling=md5sig --dup-cutoff=n3 --new
 'Обход блокировок различных сайтов по httpS, а так же инсты и запасная стратегия для GV по TCP. GV стратеги применится только если все верхние за skip'
 --filter-tcp=443 --hostlist-domains=instagram.com,googlevideo.com --hostlist=/opt/zapret/lists/russia-blacklist.txt --hostlist=/opt/zapret/lists/myhostlist.txt --hostlist=/opt/zapret/lists/mycdnlist.txt --dpi-desync=split2 --dpi-desync-repeats=2 --dpi-desync-split-seqovl=681 --dpi-desync-split-pos=1 --dpi-desync-fooling=badseq,hopbyhop2 --dpi-desync-split-seqovl-pattern=/opt/zapret/files/fake/tls_clienthello_2.bin --new
 'Обход блокировок указанных в стратегии сайтов по httpS'
