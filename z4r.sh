@@ -276,7 +276,7 @@ get_menu() {
         echo "zapret не установлен, пропускаем скрипт меню"
         return
  fi
- read -p $'\033[33mВыберите необходимое действие? (1-8 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать альтернативные страты разблокировки войса DS,WA,TG вместо скриптов bol-van или вернуться снова к скриптам (переключатель)\n9. Переключить zapret на nftables или вернуть iptables (переключатель). Актуально для OpenWRT 21+. Может помочь с войсами\n10. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
+ read -p $'\033[33mВыберите необходимое действие? (1-8 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать альтернативные страты разблокировки войса DS,WA,TG вместо скриптов bol-van или вернуться снова к скриптам (переключатель)\n9. Переключить zapret на nftables или вернуть iptables (переключатель)(На все вопросы жать Enter). Актуально для OpenWRT 21+. Может помочь с войсами\n10. Активировать zeefeer premium (Нажимать только Valery ProD)\033[0m\n' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  case "$clean_answer" in
   "1")
@@ -348,14 +348,17 @@ get_menu() {
 	if grep -q '^FWTYPE=iptables$' "/opt/zapret/config"; then
      # Был только 443 → добавляем порты и убираем --skip
      sed -i 's/^FWTYPE=iptables$/FWTYPE=nftables/' "/opt/zapret/config"
+	 /opt/zapret/install_prereq.sh
+  	 /opt/zapret/init.d/sysv/zapret restart
      echo -e "${green}Zapret moode: nftables.${plain}"
 	elif grep -q '^FWTYPE=nftables$' "/opt/zapret/config"; then
      sed -i 's/^FWTYPE=nftables$/FWTYPE=iptables/' "/opt/zapret/config"
+	 /opt/zapret/install_prereq.sh
+  	 /opt/zapret/init.d/sysv/zapret restart
      echo -e "${green}Zapret moode: iptables.${plain}"
 	else
      echo -e "${yellow}Неизвестное состояние строки FWTYPE. Проверь конфиг вручную.${plain}"
 	fi
-	/opt/zapret/init.d/sysv/zapret restart
    exit 0
    ;;
   "10")
