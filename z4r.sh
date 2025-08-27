@@ -388,7 +388,7 @@ fi
 echo "OS: $release"
 
 #Запуск скрипта под нужную версию
-if [[ "$release" == "ubuntu" || "$release" == "debian" ]]; then
+if [[ "$release" == "ubuntu" || "$release" == "debian" || "$release" == "endeavouros" ]]; then
 	OSystem="VPS"
 elif [[ "$release" == "openwrt" || "$release" == "immortalwrt" || "$release" == "asuswrt" ]]; then
 	OSystem="WRT"
