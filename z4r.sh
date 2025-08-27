@@ -66,8 +66,7 @@ try_strategies() {
         else
             echo "$user_domain" > "$base_path/${i}.txt"
         fi
-
-        /opt/zapret/init.d/sysv/zapret restart
+        #/opt/zapret/init.d/sysv/zapret restart (Проверил, работает без перезагрузки)
         echo "Стратегия номер $i активирована"
 
         read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить и выйти, Enter - далее): " answer
