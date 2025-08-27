@@ -41,6 +41,10 @@ get_repo() {
  touch /opt/zapret/extra_strats/UDP/YT/{1..8}.txt /opt/zapret/extra_strats/TCP/RKN/{1..17}.txt /opt/zapret/extra_strats/TCP/User/{1..17}.txt /opt/zapret/extra_strats/TCP/YT/{1..17}.txt /opt/zapret/extra_strats/TCP/temp/{1..17}.txt
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
  wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
+ checkNFT=$(which nft)
+ if [ -x "$checkNFT" ] ; then
+  sed -i 's/^FWTYPE=iptables$/FWTYPE=nftables/' "/opt/zapret/config.default"
+ fi
  wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
  wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
 }
@@ -307,6 +311,7 @@ get_menu() {
    if [[ "$OSystem" == "Entware" ]]; then
     sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
    fi
+   cp -f /opt/zapret/config.default /opt/zapret/config
    /opt/zapret/init.d/sysv/zapret start
    echo -e "${green}Config файл обновлён. Листы подбора стратегий и исключений сброшены в дефолт. Фейк файлы обновлены.${plain}"
    exit 0
