@@ -393,7 +393,7 @@ echo "OS: $release"
 #Запуск скрипта под нужную версию
 if [[ "$release" == "ubuntu" || "$release" == "debian" || "$release" == "endeavouros" ]]; then
 	OSystem="VPS"
-elif [[ "$release" == "openwrt" || "$release" == "immortalwrt" || "$release" == "asuswrt" || "$release" == "merlinWRT" ]]; then
+elif [[ "$release" == "openwrt" || "$release" == "immortalwrt" || "$release" == "asuswrt" ]]; then
 	OSystem="WRT"
 elif [[ "$release" == "entware" ]]; then
 	OSystem="Entware"
