@@ -226,9 +226,6 @@ keenetic_fixes() {
  wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
  chmod +x /opt/zapret/init.d/sysv/zapret
  echo "Права выданы /opt/zapret/init.d/sysv/zapret"
- wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
- chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
- echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
  wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
  chmod +x /opt/etc/init.d/S00fix
  echo "Права выданы /opt/etc/init.d/S00fix"
@@ -413,7 +410,7 @@ get_menu
  
 #keenetic preinstal env
 if [[ "$OSystem" == "Entware" ]]; then
- opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
+ opkg install coreutils-sort grep gzip ipset iptables xtables-addons_legacy
 fi
 
 #Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
