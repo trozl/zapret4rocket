@@ -232,7 +232,7 @@ keenetic_fixes() {
  cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
  echo "10-keenetic-udp-fix скопирован"
  #Раскомменчивание юзера под keenetic
- sed -i 's/^#WS_USER=nobody$/WS_USER=admin/' /opt/zapret/config.default
+ sed -i 's/^#WS_USER=nobody$/WS_USER=Yanninay/' /opt/zapret/config.default
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
