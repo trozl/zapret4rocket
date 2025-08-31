@@ -411,6 +411,8 @@ get_menu
 #keenetic preinstal env
 if [[ "$OSystem" == "Entware" ]]; then
  opkg install coreutils-sort grep gzip ipset iptables xtables-addons_legacy
+ touch /root/.wget-hsts
+ chmod 644 /root/.wget-hsts
 fi
 
 #Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
