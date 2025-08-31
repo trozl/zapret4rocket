@@ -2,7 +2,7 @@
 #Команда установки
 #curl -O https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/z4r.sh && bash z4r.sh && rm z4r.sh
 #В случае отсутствия curl или bash: 
-#Для keenetic entware/OWRT: opkg update && opkg install curl bash
+#Для роутеров: opkg update && opkg install curl bash
 #Для Ubuntu/Debian: apt update && apt install curl bash
 
 set -e
@@ -221,21 +221,28 @@ install_zapret_reboot() {
  echo -e "\033[32mzeefeer перезапущен и полностью установлен\033[0m"
 }
 
-#Для Keenetic
-keenetic_fixes() {
- wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
- chmod +x /opt/zapret/init.d/sysv/zapret
- echo "Права выданы /opt/zapret/init.d/sysv/zapret"
- wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
- chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
- echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
- wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
- chmod +x /opt/etc/init.d/S00fix
- echo "Права выданы /opt/etc/init.d/S00fix"
- cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
- echo "10-keenetic-udp-fix скопирован"
- #Раскомменчивание юзера под keenetic
- sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+#Для Entware Keenetic + merlin
+entware_fixes() {
+ if [ "$hardware" = "keenetic" ]; then
+  wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
+  chmod +x /opt/zapret/init.d/sysv/zapret
+  echo "Права выданы /opt/zapret/init.d/sysv/zapret"
+  wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
+  chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
+  echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
+  wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
+  chmod +x /opt/etc/init.d/S00fix
+  echo "Права выданы /opt/etc/init.d/S00fix"
+  cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
+  echo "10-keenetic-udp-fix скопирован"
+ fi
+ #Раскомменчивание юзера под keenetic или merlin
+ if [ "$hardware" = "keenetic" ]; then
+  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+ elif [ "$hardware" = "merlin" ]; then
+  merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
+  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config"  
+ fi
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
@@ -305,9 +312,12 @@ get_menu() {
    rm -rf /opt/zapret/lists /opt/zapret/extra_strats
    rm -f /opt/zapret/files/fake/http_fake_MS.bin /opt/zapret/files/fake/quic_{1..7}.bin /opt/zapret/files/fake/syn_packet.bin /opt/zapret/files/fake/tls_clienthello_{1..18}.bin /opt/zapret/files/fake/tls_clienthello_2n.bin /opt/zapret/files/fake/tls_clienthello_6a.bin
    get_repo
-   #Раскомменчивание юзера под keenetic
-   if [[ "$OSystem" == "Entware" ]]; then
+   #Раскомменчивание юзера под keenetic или merlin
+   if [ "$hardware" = "keenetic" ]; then
     sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+   elif [ "$hardware" = "merlin" ]; then
+    merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
+    sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config"  
    fi
    cp -f /opt/zapret/config.default /opt/zapret/config
    /opt/zapret/init.d/sysv/zapret start
@@ -388,7 +398,14 @@ else
     echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
     exit 1
 fi
-echo "OS: $release"
+if grep -qi "merlin" /proc/version; then
+    hardware="merlin"
+elif grep -qi "keenetic" /proc/version; then
+	hardware="keenetic"
+else
+ echo -e "${yellow}Железо не определено. Будем считать что это Keenetic. Если будут проблемы - пишите в саппорт.${plain}"
+fi
+echo "OS: $release $hardware"
 
 #Запуск скрипта под нужную версию
 if [[ "$release" == "ubuntu" || "$release" == "debian" || "$release" == "endeavouros" ]]; then
@@ -411,9 +428,13 @@ fi
 #Меню
 get_menu
  
-#keenetic preinstal env
-if [[ "$OSystem" == "Entware" ]]; then
+#entware keenetic and merlin preinstal env. merlin wget repair
+if [ "$hardware" = "keenetic" ]; then
  opkg install coreutils-sort grep gzip ipset iptables kmod_ndms xtables-addons_legacy
+elif [ "$hardware" = "merlin" ]; then
+ opkg install coreutils-sort grep gzip ipset iptables xtables-addons_legacy
+ touch /root/.wget-hsts
+ chmod 644 /root/.wget-hsts
 fi
 
 #Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
@@ -431,9 +452,9 @@ zapret_get
 #Создаём папки и забираем файлы папок lists, fake, extra_strats, копируем конфиг, скрипты для войсов DS, WA, TG
 get_repo
 
-#Для Keenetic
+#Для Keenetic и merlin
 if [[ "$OSystem" == "Entware" ]]; then
- keenetic_fixes
+ entware_fixes
 fi
 
 #Запуск установочных скриптов и перезагрузка
