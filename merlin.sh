@@ -223,14 +223,14 @@ install_zapret_reboot() {
 
 #Для Keenetic
 keenetic_fixes() {
- wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
- chmod +x /opt/zapret/init.d/sysv/zapret
- echo "Права выданы /opt/zapret/init.d/sysv/zapret"
- wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
- chmod +x /opt/etc/init.d/S00fix
- echo "Права выданы /opt/etc/init.d/S00fix"
- cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
- echo "10-keenetic-udp-fix скопирован"
+ #wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
+ #chmod +x /opt/zapret/init.d/sysv/zapret
+ #echo "Права выданы /opt/zapret/init.d/sysv/zapret"
+ #wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
+ #chmod +x /opt/etc/init.d/S00fix
+ #echo "Права выданы /opt/etc/init.d/S00fix"
+ #cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
+ #echo "10-keenetic-udp-fix скопирован"
  #Раскомменчивание юзера под keenetic
  sed -i 's/^#WS_USER=nobody$/WS_USER=Yanninay/' /opt/zapret/config.default
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
