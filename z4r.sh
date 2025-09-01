@@ -241,7 +241,7 @@ entware_fixes() {
   sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  elif [ "$hardware" = "merlin" ]; then
   merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
-  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config"  
+  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config.default"  
  fi
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
