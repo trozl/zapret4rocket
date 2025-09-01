@@ -55,13 +55,14 @@ try_strategies() {
     local list_file="$3"
     local final_action="$4"
 
-    for ((i=1; i<=count; i++)); do
-        if [[ $i -ge 2 ]]; then
+    i=1
+    while [ "$i" -le "$count" ]; do
+        if [ "$i" -ge 2 ]; then
             prev=$((i - 1))
             echo -n > "$base_path/${prev}.txt"
         fi
 
-        if [[ "$list_file" != "/dev/null" ]]; then
+        if [ "$list_file" != "/dev/null" ]; then
             cp "$list_file" "$base_path/${i}.txt"
         else
             echo "$user_domain" > "$base_path/${i}.txt"
@@ -71,11 +72,12 @@ try_strategies() {
 
         read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить и выйти, Enter - далее): " answer
         clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
-        if [[ "$clean_answer" == "Y" ]]; then
+        if [ "$clean_answer" = "Y" ]; then
             echo "Стратегия $i сохранена. Выходим."
             eval "$final_action"
             exit 0
         fi
+		i=$((i + 1))
     done
 
     echo -n > "$base_path/${count}.txt"
