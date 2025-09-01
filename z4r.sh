@@ -404,6 +404,7 @@ elif grep -qi "keenetic" /proc/version; then
 	hardware="keenetic"
 else
  echo -e "${yellow}Железо не определено. Будем считать что это Keenetic. Если будут проблемы - пишите в саппорт.${plain}"
+ hardware="keenetic"
 fi
 echo "OS: $release $hardware"
 
