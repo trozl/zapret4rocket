@@ -400,13 +400,15 @@ else
     echo "Не удалось определить ОС. Прекращение работы скрипта." >&2
     exit 1
 fi
-if grep -qi "merlin" /proc/version; then
+if [[ "$release" == "entware" ]]; then
+ if grep -qi "merlin" /proc/version; then
     hardware="merlin"
-elif grep -qi "keenetic" /proc/version; then
-	hardware="keenetic"
-else
- echo -e "${yellow}Железо не определено. Будем считать что это Keenetic. Если будут проблемы - пишите в саппорт.${plain}"
- hardware="keenetic"
+ elif grep -qi "keenetic" /proc/version; then
+   	hardware="keenetic"
+ else
+  echo -e "${yellow}Железо не определено. Будем считать что это Keenetic. Если будут проблемы - пишите в саппорт.${plain}"
+  hardware="keenetic"
+ fi
 fi
 echo "OS: $release $hardware"
 
