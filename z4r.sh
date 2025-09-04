@@ -400,7 +400,7 @@ else
     exit 1
 fi
 if [[ "$release" == "entware" ]]; then
- if [[ -f /jffs ]]; then
+ if uname -a | grep -qi "Merlin"; then
     hardware="merlin"
  elif grep -qi "keenetic" /proc/version; then
    	hardware="keenetic"
