@@ -242,7 +242,14 @@ entware_fixes() {
   sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
  elif [ "$hardware" = "merlin" ]; then
   merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
-  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config.default"  
+  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config.default"
+  #Патчинг на некоторых merlin /opt/zapret/common/linux_fw.sh
+  if command -v sysctl >/dev/null 2>&1; then
+   echo "sysctl доступен. Патч linux_fw.sh не требуется"
+  else
+   echo "sysctl отсутствует. MerlinWRT? Патчим /opt/zapret/common/linux_fw.sh"
+   sed -i 's|sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=\$1|echo \$1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal|' /opt/zapret/common/linux_fw.sh
+  fi
  fi
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
