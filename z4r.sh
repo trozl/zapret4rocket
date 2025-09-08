@@ -219,7 +219,11 @@ zapret_get() {
 install_zapret_reboot() {
  sh -i /opt/zapret/install_easy.sh
  /opt/zapret/init.d/sysv/zapret restart
- echo -e "\033[32mzeefeer перезапущен и полностью установлен\nЕсли требуется меню - введите скрипт ещё раз. Саппорт: tg: zee4r\033[0m"
+ if pidof nfqws >/dev/null; then
+  echo -e "\033[32mzapret перезапущен и полностью установлен\nЕсли требуется меню - введите скрипт ещё раз. Саппорт: tg: zee4r\033[0m"
+ else
+  echo -e "${yellow}zapret полностью установлен, но не обнаружен после запуска в исполняемых задачах через pidof\nСаппорт: tg: zee4r${plain}"
+ fi
 }
 
 #Для Entware Keenetic + merlin
