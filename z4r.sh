@@ -237,38 +237,23 @@ entware_fixes() {
   cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
   echo "10-keenetic-udp-fix скопирован"
  fi
-
-
-
- if [ "$hardware" = "keenetic" ]; then
-  sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
- elif [ "$hardware" = "merlin" ]; then
-  merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
-  sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config.default"
-  #Патчинг на некоторых merlin /opt/zapret/common/linux_fw.sh
-  if command -v sysctl >/dev/null 2>&1; then
-   echo "sysctl доступен. Патч linux_fw.sh не требуется"
-  else
-   echo "sysctl отсутствует. MerlinWRT? Патчим /opt/zapret/common/linux_fw.sh"
-   sed -i 's|sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=\$1|echo \$1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal|' /opt/zapret/common/linux_fw.sh
-  fi
- fi
  
 # #Раскомменчивание юзера под keenetic или merlin
-# if /opt/zapret/nfq/nfqws --dry-run --user="nobody" 2>&1 | grep -q "queue"; then
-#    echo "WS_USER=nobody"
-#	sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
-# elif /opt/zapret/nfq/nfqws --dry-run --user="$(head -n1 /etc/passwd | cut -d: -f1)" 2>&1 | grep -q "queue"; then
-#    echo "WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)"
-#    sed -i "s/^#WS_USER=nobody$/WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)/" "/opt/zapret/config.default"
-# fi
-# #Патчинг на некоторых merlin /opt/zapret/common/linux_fw.sh
-# if command -v sysctl >/dev/null 2>&1; then
-#  echo "sysctl доступен. Патч linux_fw.sh не требуется"
-# else
-#  echo "sysctl отсутствует. MerlinWRT? Патчим /opt/zapret/common/linux_fw.sh"
-#  sed -i 's|sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=\$1|echo \$1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal|' /opt/zapret/common/linux_fw.sh
-# fi
+ sh /opt/zapret/install_bin.sh
+ if /opt/zapret/nfq/nfqws --dry-run --user="nobody" 2>&1 | grep -q "queue"; then
+    echo "WS_USER=nobody"
+	sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+ elif /opt/zapret/nfq/nfqws --dry-run --user="$(head -n1 /etc/passwd | cut -d: -f1)" 2>&1 | grep -q "queue"; then
+    echo "WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)"
+    sed -i "s/^#WS_USER=nobody$/WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)/" "/opt/zapret/config.default"
+ fi
+ #Патчинг на некоторых merlin /opt/zapret/common/linux_fw.sh
+ if command -v sysctl >/dev/null 2>&1; then
+  echo "sysctl доступен. Патч linux_fw.sh не требуется"
+ else
+  echo "sysctl отсутствует. MerlinWRT? Патчим /opt/zapret/common/linux_fw.sh"
+  sed -i 's|sysctl -w net.netfilter.nf_conntrack_tcp_be_liberal=\$1|echo \$1 > /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal|' /opt/zapret/common/linux_fw.sh
+ fi
  #sed для пропуска запроса на прочтение readme, т.к. система entware. Дабы скрипт отрабатывал далее на Enter
  sed -i 's/if \[ -n "\$1" \] || ask_yes_no N "do you want to continue";/if true;/' /opt/zapret/common/installer.sh
  ln -fs /opt/zapret/init.d/sysv/zapret /opt/etc/init.d/S90-zapret
@@ -339,11 +324,12 @@ get_menu() {
    rm -f /opt/zapret/files/fake/http_fake_MS.bin /opt/zapret/files/fake/quic_{1..7}.bin /opt/zapret/files/fake/syn_packet.bin /opt/zapret/files/fake/tls_clienthello_{1..18}.bin /opt/zapret/files/fake/tls_clienthello_2n.bin /opt/zapret/files/fake/tls_clienthello_6a.bin
    get_repo
    #Раскомменчивание юзера под keenetic или merlin
-   if [ "$hardware" = "keenetic" ]; then
-    sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
-   elif [ "$hardware" = "merlin" ]; then
-    merlin_user=$(head -n1 /etc/passwd | cut -d: -f1)
-    sed -i "s/^#WS_USER=nobody$/WS_USER=$merlin_user/" "/opt/zapret/config"  
+   if /opt/zapret/nfq/nfqws --dry-run --user="nobody" 2>&1 | grep -q "queue"; then
+    echo "WS_USER=nobody"
+	sed -i 's/^#\(WS_USER=nobody\)/\1/' /opt/zapret/config.default
+   elif /opt/zapret/nfq/nfqws --dry-run --user="$(head -n1 /etc/passwd | cut -d: -f1)" 2>&1 | grep -q "queue"; then
+    echo "WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)"
+    sed -i "s/^#WS_USER=nobody$/WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)/" "/opt/zapret/config.default"
    fi
    cp -f /opt/zapret/config.default /opt/zapret/config
    /opt/zapret/init.d/sysv/zapret start
