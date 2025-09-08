@@ -246,6 +246,8 @@ entware_fixes() {
  elif /opt/zapret/nfq/nfqws --dry-run --user="$(head -n1 /etc/passwd | cut -d: -f1)" 2>&1 | grep -q "queue"; then
     echo "WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)"
     sed -i "s/^#WS_USER=nobody$/WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)/" "/opt/zapret/config.default"
+ else
+  echo -e "${yellow}WS_USER не подошёл. Скорее всего будут проблемы. Если что - пишите в саппорт${plain}"
  fi
  #Патчинг на некоторых merlin /opt/zapret/common/linux_fw.sh
  if command -v sysctl >/dev/null 2>&1; then
@@ -330,6 +332,8 @@ get_menu() {
    elif /opt/zapret/nfq/nfqws --dry-run --user="$(head -n1 /etc/passwd | cut -d: -f1)" 2>&1 | grep -q "queue"; then
     echo "WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)"
     sed -i "s/^#WS_USER=nobody$/WS_USER=$(head -n1 /etc/passwd | cut -d: -f1)/" "/opt/zapret/config.default"
+   else
+    echo -e "${yellow}WS_USER не подошёл. Скорее всего будут проблемы. Если что - пишите в саппорт${plain}"
    fi
    cp -f /opt/zapret/config.default /opt/zapret/config
    /opt/zapret/init.d/sysv/zapret start
