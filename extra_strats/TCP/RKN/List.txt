@@ -8,6 +8,8 @@ discord.media
 discordcdn.com
 discordstatus.com
 discord-attachments-uploads-prd.storage.googleapis.com
+repack.me
+cloudflare.com
 ntc.party
 cloudflare-ech.com
 cdn.betterttv.net
