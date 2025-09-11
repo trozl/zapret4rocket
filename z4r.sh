@@ -30,22 +30,41 @@ dir_select(){
  cd /opt
 }
 
+#Запрос на резервирование настроек в подборе стратегий
+backup_strats() {
+  if [ -d /opt/zapret/extra_strats ]; then
+   read -p $'\033[0;33mХотите сохранить текущие настройки ручного подбора стратегий? Не рекомендуется. (\"5\" - сохранить, Enter - нет): \033[0m' answer
+   clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+   if [[ "$clean_answer" == "5" ]]; then
+		cp -r /opt/zapret/extra_strats /opt/
+        echo "Настройки подбора резервированы."
+   else
+		echo "Настройки подбора будут сброшены. Листы будут обновлены."		
+   fi 
+  fi
+}
+
 #Создаём папки и забираем файлы папок lists, fake, extra_strats, копируем конфиг, скрипты для войсов DS, WA, TG
 get_repo() {
  mkdir -p /opt/zapret/lists /opt/zapret/extra_strats/TCP/{RKN,User,YT,temp} /opt/zapret/extra_strats/UDP/YT
- for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
- for fakefile in http_fake_MS.bin quic_{1..7}.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin; do wget -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
- wget -O /opt/zapret/extra_strats/UDP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/UDP/YT/List.txt
- wget -O /opt/zapret/extra_strats/TCP/RKN/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/RKN/List.txt
- wget -O /opt/zapret/extra_strats/TCP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/YT/List.txt
+ for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -4 -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
+ for fakefile in http_fake_MS.bin quic_{1..7}.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin; do wget -4 -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
+ wget -4 -O /opt/zapret/extra_strats/UDP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/UDP/YT/List.txt
+ wget -4 -O /opt/zapret/extra_strats/TCP/RKN/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/RKN/List.txt
+ wget -4 -O /opt/zapret/extra_strats/TCP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/YT/List.txt
  touch /opt/zapret/extra_strats/UDP/YT/{1..8}.txt /opt/zapret/extra_strats/TCP/RKN/{1..17}.txt /opt/zapret/extra_strats/TCP/User/{1..17}.txt /opt/zapret/extra_strats/TCP/YT/{1..17}.txt /opt/zapret/extra_strats/TCP/temp/{1..17}.txt
+ if [ -d /opt/extra_strats ]; then
+  rm -rf /opt/zapret/extra_strats
+  mv /opt/extra_strats /opt/zapret/
+  echo "Востановление настроек подбора из резерва выполнено."
+ fi
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
- wget -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
+ wget -4 -O /opt/zapret/config.default https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/config.default
  if command -v nft >/dev/null 2>&1; then
   sed -i 's/^FWTYPE=iptables$/FWTYPE=nftables/' "/opt/zapret/config.default"
  fi
- wget -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
- wget -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
+ wget -4 -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+ wget -4 -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
 }
 
 #Функция для функции подбора стратегий
@@ -85,11 +104,6 @@ try_strategies() {
 
 #Сама функция подбора стратегий
 Strats_Tryer() {
-    if [ ! -f "/opt/zapret/uninstall_easy.sh" ]; then
-        echo "zapret не установлен, пропускаем скрипт подбора профиля"
-        return
-    fi
-
     read -p $'\033[33mПодобрать стратегию? (1-4 или Enter для пропуска):\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Кастомный домен\033[0m\n' answer
     clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 
@@ -134,13 +148,13 @@ Strats_Tryer() {
 
 #Удаление старого запрета, если есть
 remove_zapret() {
- if [ -f "/opt/zapret/uninstall_easy.sh" ]; then
-     echo "Файл zapret/uninstall_easy.sh найден. Выполняем его"
+ if [ -f "/opt/zapret/config" ]; then
+     echo "Выполняем zapret/uninstall_easy.sh"
 	 /opt/zapret/init.d/sysv/zapret stop
      sh /opt/zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
-     echo "Файл zapret/uninstall_easy.sh не найден. Переходим к следующему шагу."
+     echo "zapret не инсталлирован в систему. Переходим к следующему шагу."
  fi
  if [ -d "/opt/zapret" ]; then
      echo "Удаляем папку zapret"
@@ -157,10 +171,10 @@ version_select() {
         # Если пустой ввод — берем значение по умолчанию
 		if [ -z "$USER_VER" ]; then
     	 if [ -z "$USER_VER" ]; then
-    	 VER1=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-    	 VER2=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4 | sed 's/^v//')
-    	 VER3=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -r 's/.*"v([^"]+)".*/\1/')
-    	 VER4=$(wget -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | awk -F'"' '{print $4}' | sed 's/^v//')
+    	 VER1=$(wget -4 -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+    	 VER2=$(wget -4 -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4 | sed 's/^v//')
+    	 VER3=$(wget -4 -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | sed -r 's/.*"v([^"]+)".*/\1/')
+    	 VER4=$(wget -4 -qO- https://api.github.com/repos/bol-van/zapret/releases/latest | grep '"tag_name":' | awk -F'"' '{print $4}' | sed 's/^v//')
 		 fi
 	     # проверяем результаты по порядку
     	 if [ ${#VER1} -ge 2 ]; then
@@ -209,7 +223,7 @@ zapret_get() {
  else
      tarfile="zapret-v$VER-openwrt-embedded.tar.gz"
  fi
- wget -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
+ wget -4 -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
  tar -xzf "$tarfile"
  rm -f "$tarfile"
  mv "zapret-v$VER" /opt/zapret
@@ -220,7 +234,7 @@ install_zapret_reboot() {
  sh -i /opt/zapret/install_easy.sh
  /opt/zapret/init.d/sysv/zapret restart
  if pidof nfqws >/dev/null; then
-  echo -e "\033[32mzapret перезапущен и полностью установлен\nЕсли требуется меню - введите скрипт ещё раз. Саппорт: tg: zee4r\033[0m"
+  echo -e "\033[32mzapret перезапущен и полностью установлен\nЕсли требуется меню (например не работают какие-то ресурсы) - введите скрипт ещё раз. Саппорт: tg: zee4r\033[0m"
  else
   echo -e "${yellow}zapret полностью установлен, но не обнаружен после запуска в исполняемых задачах через pidof\nСаппорт: tg: zee4r${plain}"
  fi
@@ -229,13 +243,13 @@ install_zapret_reboot() {
 #Для Entware Keenetic + merlin
 entware_fixes() {
  if [ "$hardware" = "keenetic" ]; then
-  wget -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
+  wget -4 -O /opt/zapret/init.d/sysv/zapret https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/zapret
   chmod +x /opt/zapret/init.d/sysv/zapret
   echo "Права выданы /opt/zapret/init.d/sysv/zapret"
-  wget -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
+  wget -4 -q -O /opt/etc/ndm/netfilter.d/000-zapret.sh https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/000-zapret.sh
   chmod +x /opt/etc/ndm/netfilter.d/000-zapret.sh
   echo "Права выданы /opt/etc/ndm/netfilter.d/000-zapret.sh"
-  wget -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
+  wget -4 -q -O /opt/etc/init.d/S00fix https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/Entware/S00fix
   chmod +x /opt/etc/init.d/S00fix
   echo "Права выданы /opt/etc/init.d/S00fix"
   cp -a /opt/zapret/init.d/custom.d.examples.linux/10-keenetic-udp-fix /opt/zapret/init.d/sysv/custom.d/10-keenetic-udp-fix
@@ -282,8 +296,8 @@ get_panel() {
  elif [[ "$clean_answer" == "3PROXY" ]]; then
      echo "Установка 3proxy (by SnoyIatk)"
      bash <(curl -Ls https://raw.githubusercontent.com/SnoyIatk/3proxy/master/3proxyinstall.sh)
-     wget -O /etc/3proxy/.proxyauth https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
-     wget -O /etc/3proxy/3proxy.cfg https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
+     wget -4 -O /etc/3proxy/.proxyauth https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
+     wget -4 -O /etc/3proxy/3proxy.cfg https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
      #mv del.proxyauth .proxyauth
      #mv .proxyauth /etc/3proxy/
      #mv 3proxy.cfg /etc/3proxy/
@@ -298,7 +312,7 @@ get_panel() {
 
 #Меню
 get_menu() {
- if [ ! -f "/opt/zapret/uninstall_easy.sh" ]; then
+ if [ ! -f "/opt/zapret/config" ]; then
         echo "zapret не установлен, пропускаем скрипт меню"
         return
  fi
@@ -325,7 +339,9 @@ get_menu() {
    exit 0
    ;;
   "5")
+   echo -e "${yellow}Конфиг обновлен (UTC +0): $(curl -s "https://api.github.com/repos/IndeecFOX/zapret4rocket/commits?path=config.default&per_page=1" | grep '"date"' | head -n1 | cut -d'"' -f4) ${plain}"
    /opt/zapret/init.d/sysv/zapret stop
+   backup_strats
    rm -rf /opt/zapret/lists /opt/zapret/extra_strats
    rm -f /opt/zapret/files/fake/http_fake_MS.bin /opt/zapret/files/fake/quic_{1..7}.bin /opt/zapret/files/fake/syn_packet.bin /opt/zapret/files/fake/tls_clienthello_{1..18}.bin /opt/zapret/files/fake/tls_clienthello_2n.bin /opt/zapret/files/fake/tls_clienthello_6a.bin
    get_repo
@@ -341,7 +357,7 @@ get_menu() {
    fi
    cp -f /opt/zapret/config.default /opt/zapret/config
    /opt/zapret/init.d/sysv/zapret start
-   echo -e "${green}Config файл обновлён. Листы подбора стратегий и исключений сброшены в дефолт. Фейк файлы обновлены.${plain}"
+   echo -e "${green}Config файл обновлён. Листы подбора стратегий и исключений сброшены в дефолт, если не просили сохранить. Фейк файлы обновлены.${plain}"
    exit 0
    ;;
   "6")
@@ -462,11 +478,13 @@ fi
 
 #Проверка наличия каталога opt и его создание при необходиомости (для некоторых роутеров), переход в него
 dir_select
-
+#Запрос на резервирование стратегий, если есть что резервировать
+backup_strats
 #Удаление старого запрета, если есть
 remove_zapret
-
 #Запрос желаемой версии zapret
+echo -e "${yellow}Конфиг обновлен (UTC +0): $(curl -s "https://api.github.com/repos/IndeecFOX/zapret4rocket/commits?path=config.default&per_page=1" | grep '"date"' | head -n1 | cut -d'"' -f4) ${plain}"
+echo -e "${yellow}zeefeer обновлен (UTC +0): $(curl -s "https://api.github.com/repos/IndeecFOX/zapret4rocket/commits?path=z4r.sh&per_page=1" | grep '"date"' | head -n1 | cut -d'"' -f4) ${plain}"
 version_select
  
 #Скачивание, распаковка архива zapret и его удаление
