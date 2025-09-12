@@ -149,8 +149,10 @@ Strats_Tryer() {
 #Удаление старого запрета, если есть
 remove_zapret() {
  if [ -f "/opt/zapret/config" ]; then
+  if [ -f "/opt/zapret/init.d/sysv/zapret" ]; then
+  	 /opt/zapret/init.d/sysv/zapret stop
+  fi
      echo "Выполняем zapret/uninstall_easy.sh"
-	 /opt/zapret/init.d/sysv/zapret stop
      sh /opt/zapret/uninstall_easy.sh
      echo "Скрипт uninstall_easy.sh выполнен."
  else
