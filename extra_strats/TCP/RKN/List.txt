@@ -1,3 +1,5 @@
+google.com
+fonts.gstatic.com
 aws.amazon.com
 discord.com
 discord.gg
