@@ -221,7 +221,6 @@ version_select() {
 #Скачивание, распаковка архива zapret и его удаление, установка wget-ssl
 zapret_get() {
  if [[ "$OSystem" == "VPS" ]]; then
- 	 apt update && apt install wget-ssl
      tarfile="zapret-v$VER.tar.gz"
  else
  	 opkg update && opkg install wget-ssl
