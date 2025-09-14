@@ -88,9 +88,9 @@ try_strategies() {
         #/opt/zapret/init.d/sysv/zapret restart (Проверил, работает без перезагрузки)
         echo "Стратегия номер $i активирована"
 
-        read -p "Проверьте работоспособность, например, в браузере и введите (\"Y\" - сохранить и выйти, Enter - далее): " answer
+        read -p "Проверьте работоспособность, например, в браузере и введите (\"1\" - сохранить и выйти, Enter - далее): " answer
         clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
-        if [[ "$clean_answer" == "Y" ]]; then
+        if [[ "$clean_answer" == "1" ]]; then
             echo "Стратегия $i сохранена. Выходим."
             eval "$final_action"
             exit 0
@@ -461,9 +461,12 @@ else
 fi
 
 #Выполнение общего для всех ОС кода с ответвлениями под ОС
-#Запрос на установку 3x-ui или аналогов для VPS
+#Запрос на установку 3x-ui или аналогов для VPS, обновление wget-ssl
 if [[ "$OSystem" == "VPS" ]]; then
- get_panel     
+ apt update && apt install wget-ssl
+ get_panel
+else
+ opkg update && opkg install wget-ssl
 fi
 
 #Меню
