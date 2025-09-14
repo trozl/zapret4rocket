@@ -218,11 +218,13 @@ version_select() {
     echo "Будет использоваться версия: $VER"
 }
 
-#Скачивание, распаковка архива zapret и его удаление
+#Скачивание, распаковка архива zapret и его удаление, установка wget-ssl
 zapret_get() {
  if [[ "$OSystem" == "VPS" ]]; then
+ 	 apt update && apt install wget-ssl
      tarfile="zapret-v$VER.tar.gz"
  else
+ 	 opkg update && opkg install wget-ssl
      tarfile="zapret-v$VER-openwrt-embedded.tar.gz"
  fi
  wget -4 -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
@@ -463,10 +465,7 @@ fi
 #Выполнение общего для всех ОС кода с ответвлениями под ОС
 #Запрос на установку 3x-ui или аналогов для VPS, обновление wget-ssl
 if [[ "$OSystem" == "VPS" ]]; then
- apt update && apt install wget-ssl
  get_panel
-else
- opkg update && opkg install wget-ssl
 fi
 
 #Меню
