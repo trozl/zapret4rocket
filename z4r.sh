@@ -27,7 +27,7 @@ dir_select(){
      echo "Создаём каталог /opt"
      mkdir /opt
  fi
- cd /opt
+ cd /tmp
 }
 
 #Запрос на резервирование настроек в подборе стратегий
@@ -47,7 +47,7 @@ backup_strats() {
 #Создаём папки и забираем файлы папок lists, fake, extra_strats, копируем конфиг, скрипты для войсов DS, WA, TG
 get_repo() {
  mkdir -p /opt/zapret/lists /opt/zapret/extra_strats/TCP/{RKN,User,YT,temp} /opt/zapret/extra_strats/UDP/YT
- for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-blacklist.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -4 -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
+ for listfile in autohostlist.txt cloudflare-ipset.txt cloudflare-ipset_v6.txt mycdnlist.txt myhostlist.txt netrogat.txt russia-discord.txt russia-youtube-rtmps.txt russia-youtube.txt russia-youtubeQ.txt; do wget -4 -P /opt/zapret/lists https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/lists/$listfile; done
  for fakefile in http_fake_MS.bin quic_{1..7}.bin syn_packet.bin tls_clienthello_{1..18}.bin tls_clienthello_2n.bin tls_clienthello_6a.bin; do wget -4 -P /opt/zapret/files/fake/ https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/fake/$fakefile; done
  wget -4 -O /opt/zapret/extra_strats/UDP/YT/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/UDP/YT/List.txt
  wget -4 -O /opt/zapret/extra_strats/TCP/RKN/List.txt https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/master/extra_strats/TCP/RKN/List.txt
@@ -85,7 +85,6 @@ try_strategies() {
         else
             echo "$user_domain" > "$base_path/${i}.txt"
         fi
-        #/opt/zapret/init.d/sysv/zapret restart (Проверил, работает без перезагрузки)
         echo "Стратегия номер $i активирована"
 
         read -p "Проверьте работоспособность, например, в браузере и введите (\"1\" - сохранить и выйти, Enter - далее): " answer
@@ -218,7 +217,7 @@ version_select() {
     echo "Будет использоваться версия: $VER"
 }
 
-#Скачивание, распаковка архива zapret и его удаление, установка wget-ssl
+#Скачивание, распаковка архива zapret и его удаление, установка wget-ssl для роутеров, очистка от ненуных бинарей
 zapret_get() {
  if [[ "$OSystem" == "VPS" ]]; then
      tarfile="zapret-v$VER.tar.gz"
@@ -229,7 +228,10 @@ zapret_get() {
  wget -4 -O "$tarfile" "https://github.com/bol-van/zapret/releases/download/v$VER/$tarfile"
  tar -xzf "$tarfile"
  rm -f "$tarfile"
- mv "zapret-v$VER" /opt/zapret
+ mv "zapret-v$VER" zapret
+ sh /tmp/zapret/install_bin.sh
+ find /tmp/zapret/binaries/* -maxdepth 0 -type d ! -name "$(basename "$(dirname "$(readlink /tmp/zapret/nfq/nfqws)")")" -exec rm -rf {} +
+ mv zapret /opt/zapret
 }
 
 #Запуск установочных скриптов и перезагрузка
@@ -301,9 +303,6 @@ get_panel() {
      bash <(curl -Ls https://raw.githubusercontent.com/SnoyIatk/3proxy/master/3proxyinstall.sh)
      wget -4 -O /etc/3proxy/.proxyauth https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/del.proxyauth
      wget -4 -O /etc/3proxy/3proxy.cfg https://raw.githubusercontent.com/IndeecFOX/zapret4rocket/refs/heads/master/3proxy.cfg
-     #mv del.proxyauth .proxyauth
-     #mv .proxyauth /etc/3proxy/
-     #mv 3proxy.cfg /etc/3proxy/
      /opt/zapret/init.d/sysv/zapret restart
  elif [[ "$clean_answer" == "MARZBAN" ]]; then
      echo "Установка Marzban"
