@@ -1,5 +1,5 @@
-google.com
-fonts.gstatic.com
+api.cloudflareclient.com
+engage.cloudflareclient.com
 aws.amazon.com
 discord.com
 discord.gg
