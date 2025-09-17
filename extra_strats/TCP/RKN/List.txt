@@ -1,4 +1,5 @@
 api.cloudflareclient.com
+speedtest.net
 engage.cloudflareclient.com
 aws.amazon.com
 discord.com
