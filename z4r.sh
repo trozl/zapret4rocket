@@ -380,14 +380,17 @@ get_menu() {
    ;;
   "8")
 	if grep -q '^NFQWS_PORTS_UDP=443$' "/opt/zapret/config"; then
-     # Был только 443 → добавляем порты и убираем --skip
+     # Был только 443 → добавляем порты и убираем --skip, удаляем скрипты
      sed -i 's/^NFQWS_PORTS_UDP=443$/NFQWS_PORTS_UDP=443,1400,3478-3481,5349,50000-50099,19294-19344/' "/opt/zapret/config"
      sed -i '168,169s/^--skip //' "/opt/zapret/config"
+	 rm -f \opt\zapret\init.d\sysv\custom.d\50-discord-media \opt\zapret\init.d\sysv\custom.d\50-stun4all
      echo -e "${green}Уход от скриптов bol-van. Выделены порты 50000-50099,1400,3478-3481,5349 и раскомментированы стратегии DS, WA, TG (строки 168, 169).${plain}"
 	elif grep -q '^NFQWS_PORTS_UDP=443,1400,3478-3481,5349,50000-50099,19294-19344$' "/opt/zapret/config"; then
-     # Уже расширенный список → возвращаем к 443 и добавляем --skip
+     # Уже расширенный список → возвращаем к 443 и добавляем --skip, возвращаем скрипты
      sed -i 's/^NFQWS_PORTS_UDP=443,1400,3478-3481,5349,50000-50099,19294-19344$/NFQWS_PORTS_UDP=443/' "/opt/zapret/config"
      sed -i '168,169s/^/--skip /' "/opt/zapret/config"
+	 wget -4 -O /opt/zapret/init.d/sysv/custom.d/50-stun4all https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-stun4all
+	 wget -4 -O /opt/zapret/init.d/sysv/custom.d/50-discord-media https://raw.githubusercontent.com/bol-van/zapret/master/init.d/custom.d.examples.linux/50-discord-media
      echo -e "${green}Работа от скриптов bol-van. Вернули строку к виду NFQWS_PORTS_UDP=443 и добавили "--skip " в начале строк 168–169.${plain}"
 	else
      echo -e "${yellow}Неизвестное состояние строки NFQWS_PORTS_UDP. Проверь конфиг вручную.${plain}"
