@@ -396,6 +396,7 @@ get_menu() {
      echo -e "${yellow}Неизвестное состояние строки NFQWS_PORTS_UDP. Проверь конфиг вручную.${plain}"
 	fi
 	/opt/zapret/init.d/sysv/zapret restart
+ 	echo -e "${green}Выполнение переключений завершено.${plain}"
    exit 0
    ;;
   "9")
