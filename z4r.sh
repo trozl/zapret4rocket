@@ -33,7 +33,7 @@ dir_select(){
 #Запрос на резервирование настроек в подборе стратегий
 backup_strats() {
   if [ -d /opt/zapret/extra_strats ]; then
-   read -p $'\033[0;33mХотите сохранить текущие настройки ручного подбора стратегий? Не рекомендуется. (\"5\" - сохранить, Enter - нет): \033[0m' answer
+   read -re -p $'\033[0;33mХотите сохранить текущие настройки ручного подбора стратегий? Не рекомендуется. (\"5\" - сохранить, Enter - нет): \033[0m' answer
    clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
    if [[ "$clean_answer" == "5" ]]; then
 		cp -r /opt/zapret/extra_strats /opt/
@@ -87,7 +87,7 @@ try_strategies() {
         fi
         echo "Стратегия номер $i активирована"
 
-        read -p "Проверьте работоспособность, например, в браузере и введите (\"1\" - сохранить и выйти, Enter - далее): " answer
+        read -re -p "Проверьте работоспособность, например, в браузере и введите (\"1\" - сохранить и выйти, Enter - далее): " answer
         clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
         if [[ "$clean_answer" == "1" ]]; then
             echo "Стратегия $i сохранена. Выходим."
@@ -103,7 +103,7 @@ try_strategies() {
 
 #Сама функция подбора стратегий
 Strats_Tryer() {
-    read -p $'\033[33mПодобрать стратегию? (1-4 или Enter для пропуска):\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Кастомный домен\033[0m\n' answer
+    read -re -p $'\033[33mПодобрать стратегию? (1-4 или Enter для пропуска):\033[0m\n\033[32m1. YT (UDP QUIC)\n2. YT (TCP)\n3. RKN\n4. Кастомный домен\033[0m\n' answer
     clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
 
     case "$clean_answer" in
@@ -121,7 +121,7 @@ Strats_Tryer() {
             ;;
         "4")
             echo "Режим кастомного домена"
-            read -p "Введите домен (например, mydomain.com): " user_domain
+            read -re -p "Введите домен (например, mydomain.com): " user_domain
             user_domain=$(echo "$user_domain" | tr -d '[:space:]')
 			echo "Введён домен: $user_domain"
 
@@ -168,7 +168,7 @@ remove_zapret() {
 #Запрос желаемой версии zapret или выход из скрипта для удаления
 version_select() {
     while true; do
-		read -p $'\033[0;32mВведите желаемую версию zapret (Enter для новейшей версии): \033[0m' USER_VER
+		read -re -p $'\033[0;32mВведите желаемую версию zapret (Enter для новейшей версии): \033[0m' USER_VER
         # Если пустой ввод — берем значение по умолчанию
 		if [ -z "$USER_VER" ]; then
     	 if [ -z "$USER_VER" ]; then
@@ -287,7 +287,7 @@ entware_fixes() {
 
 #Запрос на установку 3x-ui или аналогов
 get_panel() {
- read -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy или Enter для пропуска): \033[0m' answer
+ read -re -p $'\033[33mУстановить ПО для туннелирования?\033[0m \033[32m(3xui, marzban, wg, 3proxy или Enter для пропуска): \033[0m' answer
  # Удаляем лишние символы и пробелы, приводим к верхнему регистру
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  if [[ -z "$clean_answer" ]]; then
@@ -318,7 +318,7 @@ get_menu() {
         echo "zapret не установлен, пропускаем скрипт меню"
         return
  fi
- read -p $'\033[33mВыберите необходимое действие? (1-10 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать альтернативные страты разблокировки войса DS,WA,TG вместо скриптов bol-van или вернуться снова к скриптам (переключатель)\n9. Переключить zapret на nftables или вернуть iptables (переключатель)(На все вопросы жать Enter). Актуально для OpenWRT 21+. Может помочь с войсами\n10. Активировать zeefeer premium (Нажимать только Valery ProD, ну и АлександруП тоже можно :D а так же vecheromholodno)\033[0m\n' answer
+ read -re -p $'\033[33mВыберите необходимое действие? (1-10 или Enter для перехода к переустановке):\033[0m\n\033[32m1. Подобрать другие стратегии\n2. Остановить zapret\n3. Пере(запустить) zapret\n4. Удалить zapret\n5. Обновить стратегии, сбросить листы подбора стратегий и исключений\n6. Добавить домен в исключения zapret\n7. Открыть в редакторе config\n8. Активировать альтернативные страты разблокировки войса DS,WA,TG вместо скриптов bol-van или вернуться снова к скриптам (переключатель)\n9. Переключить zapret на nftables или вернуть iptables (переключатель)(На все вопросы жать Enter). Актуально для OpenWRT 21+. Может помочь с войсами\n10. Активировать zeefeer premium (Нажимать только Valery ProD, ну и АлександруП тоже можно :D а так же vecheromholodno)\033[0m\n' answer
  clean_answer=$(echo "$answer" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
  case "$clean_answer" in
   "1")
@@ -363,7 +363,7 @@ get_menu() {
    exit 0
    ;;
   "6")
-   read -p "Введите домен, который добавить в исключения (например, mydomain.com): " user_domain
+   read -re -p "Введите домен, который добавить в исключения (например, mydomain.com): " user_domain
    user_domain=$(echo "$user_domain" | tr -d '[:space:]')
    if [ -n "$user_domain" ]; then
     echo "$user_domain" >> /opt/zapret/lists/netrogat.txt
