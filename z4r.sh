@@ -63,7 +63,7 @@ get_repo() {
   rm -rf /opt/zapret/extra_strats
   mv /opt/extra_strats /opt/zapret/
   if [ -f "/opt/netrogat.txt" ]; then
-   cp -f /opt/netrogat.txt /opt/zapret/lists/
+   mv -f /opt/netrogat.txt /opt/zapret/lists/
   fi
   echo "Востановление настроек подбора из резерва выполнено."
  fi
