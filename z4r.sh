@@ -35,8 +35,15 @@ backup_strats() {
   if [ -d /opt/zapret/extra_strats ]; then
    read -re -p $'\033[0;33mХотите сохранить текущие настройки ручного подбора стратегий? Не рекомендуется. (\"5\" - сохранить, Enter - нет): \033[0m' answer
    if [[ "$answer" == "5" ]]; then
-		cp -r /opt/zapret/extra_strats /opt/
-        echo "Настройки подбора резервированы."
+		cp -rf /opt/zapret/extra_strats /opt/
+  		echo "Настройки подбора резервированы."
+  		read -re -p $'\033[0;33mХотите сохранить добавленные в лист исключений домены? Не рекомендуется. (\"5\" - сохранить, Enter - нет): \033[0m' answer
+		if [[ "$answer" == "5" ]]; then
+			cp -f /opt/zapret/lists/netrogat.txt /opt/
+        	echo "Лист исключений резервирован."
+		else
+  			echo "Лист исключений НЕ будет резервирован."
+  		fi
    else
 		echo "Настройки подбора будут сброшены. Листы будут обновлены."		
    fi 
@@ -55,6 +62,9 @@ get_repo() {
  if [ -d /opt/extra_strats ]; then
   rm -rf /opt/zapret/extra_strats
   mv /opt/extra_strats /opt/zapret/
+  if [ -f "/opt/netrogat.txt" ]; then
+   cp -f /opt/netrogat.txt /opt/zapret/lists/
+  fi
   echo "Востановление настроек подбора из резерва выполнено."
  fi
  #Копирование нашего конфига на замену стандартному и скриптов для войсов DS, WA, TG
@@ -203,8 +213,8 @@ version_select() {
         # Считаем длину
         LEN=${#USER_VER}
         # Проверка длины и знака %
-        if (( LEN > 4 )) || [[ "$USER_VER" == *%* ]]; then
-            echo "Некорректный ввод. Максимальная длина — 4 символа и без знака %. Попробуйте снова. (использование backspace может давать ошибку)"
+        if (( LEN > 4 )); then
+            echo "Некорректный ввод. Максимальная длина — 4 символа. Попробуйте снова."
             continue
         fi
         VER="$USER_VER"
@@ -362,7 +372,7 @@ get_menu() {
    if [ -n "$user_domain" ]; then
     echo "$user_domain" >> /opt/zapret/lists/netrogat.txt
 	/opt/zapret/init.d/sysv/zapret restart
-    echo -e "Домен ${yellow}$user_domain${plain} добавлен в исключения (netrogat.txt). zapret перезапущен. ${yellow}Если в домене присутствуют некорректные символы - значит случился баг при вводе (сначала писали на русском языке). Передобавьте.${plain}"
+    echo -e "Домен ${yellow}$user_domain${plain} добавлен в исключения (netrogat.txt). zapret перезапущен."
    else
     echo "Ввод пустой, ничего не добавлено"
    fi
