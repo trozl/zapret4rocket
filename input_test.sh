@@ -23,7 +23,7 @@ echo "Введён домен: $user_domain"
 
 echo "Отладочный тест"
 read -r -p "Вставьте домен: " d
-echo "HEX: $(echo -n "$d" | xxd)"
+echo "$d" | hexdump -C
 echo "TEXT: $d"
 echo "должно быть: 77 68 61 74 73 61 70 2e 63 6f 6d whatsapp.com"
 
