@@ -1,3 +1,5 @@
+desec.io
+dedyn.io
 waveform.com
 api.cloudflareclient.com
 speedtest.net
