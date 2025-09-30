@@ -465,7 +465,7 @@ elif [[ "$release" == "entware" ]]; then
 	OSystem="Entware"
 else
     echo "Для этой ОС нет подходящей функции. Или ОС определение выполнено некорректно."
-	exit 0
+	OSystem="VPS"
 fi
 
 #Инфа о времени обновления скрпта
